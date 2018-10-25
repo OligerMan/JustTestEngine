@@ -1,0 +1,227 @@
+#pragma once
+
+#include <fstream>
+#include <iostream>
+
+#include "Object.h"
+#include "Settings.h"
+
+/*
+I'm planning to create a object set from file by this template:
+
+-- Objects block start --
+object_start
+- Objects must be described by such template:
+object <object name>
+    - origin_mode <auto or custom>
+    - origin <not considered if origin mode is auto
+    but there in all situations must be 2 numbers>
+    - object_type <one of strings, defined in ObjectTypes.h>
+    - collision_type <one of strings, defined in ObjectTypes.h>
+    - sprite_type <one of strings, defined in VisualInfo.h>
+    - animation_type <one of strings, defined in VisualInfo.h>
+object_end
+-- Objects block end
+*/
+
+void parseMap(std::string path, ) {
+	std::ifstream map_file;
+	map_file.open(path);
+
+	std::vector<std::vector<Object *>> output;
+	int layers_amount = 0;
+
+	std::string input;
+	map_file >> input;
+	if (input == "settings_start") {
+		while (input != "settings_end") {
+			map_file >> input;
+			if (input == "") {
+				if (settings.isErrorOutputEnabled()) {
+					std::cout << "Settings block is crashed in map " << path << std::endl;
+				}
+				return;
+			}
+			if (input == "layers_amount") {
+				map_file >> input;
+				layers_amount = std::stoi(input);
+			}
+		}
+	}
+	else {
+		if (settings.isErrorOutputEnabled()) {
+			std::cout << "Settings block is missing in map " << path << std::endl;
+		}
+	}
+	// settings block end
+
+	output.resize(layers_amount);
+
+	// object block parsing
+	map_file >> input;
+	if (input == "object_start") {
+		while (input != "object_end") {
+			map_file >> input;
+			if (input == "object_end") {
+				break;
+			}
+			if (input == "") {
+				if (settings.isErrorOutputEnabled()) {
+					std::cout << "Objects block is crashed in map " << path << std::endl;
+				}
+				return;
+			}
+			if (input == "object") {
+				std::string object_name;
+				int layer;
+				Point
+					position,
+					origin;
+				std::string
+					origin_mode,
+					object_type,
+					collision_type,
+					sprite_type,
+					animation_type;
+
+				Object * object = new Object();
+
+
+				map_file >> object_name;
+				map_file >> input;
+				if (input == "layer") {
+					map_file >> layer;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- position block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+				map_file >> input;
+				if (input == "position") {
+					map_file >> position.x >> position.y;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- position block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+				map_file >> input;
+				if (input == "origin_mode") {
+					map_file >> origin_mode;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- origin_mode block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+				map_file >> input;
+				if (input == "origin") {
+					map_file >> origin.x >> origin.y;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- origin block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+				map_file >> input;
+				if (input == "object_type") {
+					map_file >> object_type;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- object_type block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+				map_file >> input;
+				if (input == "collision_type") {
+					map_file >> collision_type;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- collision_type block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+				map_file >> input;
+				if (input == "sprite_type") {
+					map_file >> sprite_type;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- sprite_type block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+				map_file >> input;
+				if (input == "animation_type") {
+					map_file >> animation_type;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- animation_type block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+
+				int
+					object_type_index = is_object_type_exists(object_type),
+					collision_type_index = is_collision_type_exists(collision_type),
+					sprite_type_index = is_sprite_type_exists(sprite_type),
+					animation_type_index = is_animation_type_exists(animation_type);
+
+				if (object_type_index == -1 || collision_type_index == -1 || sprite_type_index == -1 || animation_type_index == -1) {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block's values is crashed in map " << path << " in object " << object_name << std::endl;
+						continue;
+					}
+				}
+
+				object = new Object(
+					position,
+					origin,
+					(ObjectType)object_type_index,
+					(CollisionType)collision_type_index,
+					VisualInfo(
+					(SpriteType)sprite_type_index,
+						(AnimationType)animation_type_index
+					)
+				);
+
+				if (origin_mode == "auto") {
+					object->setAutoOrigin();
+				}
+
+				if (layer < layers_amount && layer >= 0) {
+					output[layer].push_back(object);
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Layer number is invalid in map " << path << " in object " << object_name << std::endl;
+						continue;
+					}
+				}
+			}
+		}
+	}
+	else {
+		if (settings.isErrorOutputEnabled()) {
+			std::cout << "Objects block is missing in map " << path << std::endl;
+		}
+	}
+
+	return;
+}

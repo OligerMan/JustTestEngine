@@ -1,0 +1,19 @@
+settings_start
+
+layers_amount 1
+
+settings_end
+object_start
+
+object yoba
+    layer 0
+    position 200 200
+    origin_mode auto
+    origin 0 0
+    object_type null
+    collision_type null
+    sprite_type null
+    animation_type null
+
+
+object_end

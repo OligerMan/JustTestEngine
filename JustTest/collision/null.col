@@ -1,0 +1,7 @@
+collision_start
+
+element test_circle
+    position 0 0
+    radius 50
+
+collision_end
