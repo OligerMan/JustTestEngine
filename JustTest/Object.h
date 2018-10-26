@@ -63,6 +63,10 @@ public:
 		return vis_info.frame_num;
 	}
 
+	void frameIncrement() {
+		vis_info.frame_num++;
+	}
+
 	Point getSpeed() {
 		return col_model.getSpeed();
 	}

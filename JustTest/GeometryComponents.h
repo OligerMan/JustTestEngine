@@ -126,6 +126,8 @@ struct Circle {
 
 	Circle(Point position, double radius) : Circle(position.x, position.y, radius) {}
 
+	~Circle() {}
+
 	void rotateCircle(double angle) {
 		center.rotate(angle);
 	}

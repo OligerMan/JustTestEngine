@@ -36,7 +36,7 @@ int is_event_type_exists(std::string example) {
 }
 
 EventType getEventType(CollisionType type1, CollisionType type2){
-	if (type1 == static_obj && type2 == static_obj) {
+	if (type1 == stone && type2 == stone) {
 		return default_collision;
 	}
 	return null_event;

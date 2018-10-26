@@ -66,9 +66,6 @@
     <ClInclude Include="GUIParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

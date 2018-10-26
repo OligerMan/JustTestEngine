@@ -123,7 +123,6 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapParser.h" />
     <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectParser.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="VisualController.h" />

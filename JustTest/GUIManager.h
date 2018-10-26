@@ -33,6 +33,7 @@ class GUIManager {
 						else {
 							gui_event_buffer.addEvent(pressed, gui_elements[layer][i], nullptr);
 						}
+						delete cursor;
 						return true;
 					}
 					else if (last_clicked_object != nullptr) {
@@ -43,7 +44,7 @@ class GUIManager {
 				}
 			}
 		}
-
+		delete cursor;
 		return false;
 	}
 

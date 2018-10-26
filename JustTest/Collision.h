@@ -57,6 +57,9 @@ public:
 	}
 
 	void setAutoOrigin() {
+		if (col_model.size() == 0) {
+			return;
+		}
 		double left, right, top, bottom;
 		if (!col_model.empty()) {
 			left = col_model[0].center.x - col_model[0].collision_radius;
@@ -122,9 +125,10 @@ bool checkModelCollision(CollisionModel * m1, CollisionModel * m2) {
 	unsigned int m1_size = m1->getModelSize();
 	unsigned int m2_size = m2->getModelSize();
 
+	Circle * c1, *c2;
+
 	for (int i = 0; i < m1_size; i++) {
 		for (int j = 0; j < m2_size; j++) {
-			Circle * c1 = new Circle(), * c2 = new Circle();
 			Point o1, o2;
 			double a1, a2;
 

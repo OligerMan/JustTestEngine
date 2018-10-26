@@ -15,5 +15,15 @@ object yoba
     sprite_type null
     animation_type null
 
+object yoba
+    layer 0
+    position -200 -200
+    origin_mode auto
+    origin 0 0
+    object_type stone
+    collision_type stone
+    sprite_type stone
+    animation_type hold
+
 
 object_end

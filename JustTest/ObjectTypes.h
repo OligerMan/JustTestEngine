@@ -4,9 +4,9 @@
 #include <string>
 
 enum CollisionType {
-	null,
-	static_obj,
-	unit,
+	null_col,
+	stone_col,
+	unit_col,
 
 	COUNT_COLLISION
 };
@@ -17,9 +17,9 @@ std::vector<std::string> collision_type;
 void collision_type_init() {
 	collision_type.resize(COUNT_COLLISION);
 
-	collision_type[null] = "null";
-	collision_type[static_obj] = "static_obj";
-	collision_type[unit] = "unit";
+	collision_type[null_col] = "null";
+	collision_type[stone_col] = "stone";
+	collision_type[unit_col] = "unit";
 }
 
 int is_collision_type_exists(std::string example) {
@@ -33,7 +33,7 @@ int is_collision_type_exists(std::string example) {
 
 
 enum ObjectType {
-	null_obj,
+	null,
 	stone,
 	hero,
 
@@ -45,7 +45,7 @@ std::vector<std::string> object_type;
 void object_type_init() {
 	object_type.resize(COUNT_OBJECT);
 
-	object_type[null_obj] = "null";
+	object_type[null] = "null";
 	object_type[stone] = "stone";
 	object_type[hero] = "hero";
 }

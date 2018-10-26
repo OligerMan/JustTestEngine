@@ -36,7 +36,6 @@ void fixCollision(Object * obj1, Object * obj2) {
 
 class Map {
 	std::vector<std::vector<Object *>> objects;                // vector of objects layers, it is defining order for render and reducing amount of collisions
-	std::vector<Object> object_set;
 	std::vector<std::string> animation_type;
 
 	EventBuffer event_buffer;
@@ -58,7 +57,6 @@ class Map {
 				}
 			}
 		}
-		
 	}
 
 	void processEventBuffer() {
@@ -95,16 +93,17 @@ class Map {
 						else {
 							event_buffer.addEvent(pressed, objects[layer][i], nullptr);
 						}
+						delete cursor;
 						return true;
-					}
-					else if (last_clicked_object != nullptr) {
-						event_buffer.addEvent(released, objects[layer][i], nullptr);
-
-						last_clicked_object = nullptr;
 					}
 				}
 			}
 		}
+		
+		event_buffer.addEvent(released, last_clicked_object, nullptr);
+		last_clicked_object = nullptr;
+
+		delete cursor;
 		return false;
 	}
 
