@@ -3,8 +3,9 @@
 #include "Object.h"
 #include "EventBuffer.h"
 #include "MapParser.h"
+#include "GameConstants.h"
 
-void fixCollision(Object * obj1, Object * obj2) {
+void fixCollision(Object * obj1, Object * obj2) { 
 	const double min_speed = 0.1;
 
 	CollisionModel * col1 = obj1->getCollisionModel();
@@ -38,6 +39,8 @@ class Map {
 	std::vector<std::vector<Object *>> objects;                // vector of objects layers, it is defining order for render and reducing amount of collisions
 	std::vector<std::string> animation_type;
 
+	Object * hero = nullptr;
+
 	EventBuffer event_buffer;
 
 	Object * last_clicked_object = nullptr;
@@ -66,10 +69,20 @@ class Map {
 			if (buffer_elem.getFirstObject() == nullptr) {
 				break;
 			}
+			Object
+				* obj1 = buffer_elem.getFirstObject(),
+				*obj2 = buffer_elem.getSecondObject();
+			double thresh = consts.getSpeedDamageThreshold();
+			double coef = consts.getSpeedDamageCoef();
+
 			switch (buffer_elem.getEventType()) {
 			case null:
 				break;
 			case default_collision:
+
+				
+				obj1->getUnitInfo()->dealDamage(std::max(0.0, (obj1->getSpeed().getLength() - thresh) * coef));
+				obj2->getUnitInfo()->dealDamage(std::max(0.0, (obj2->getSpeed().getLength() - thresh) * coef));
 				break;
 			case clicked:
 				buffer_elem.getFirstObject()->changeAngle(10);
@@ -117,7 +130,15 @@ class Map {
 
 public:
 
-	Map() : objects(parseMap("maps/test_map.map")) {}
+	Map() : objects(parseMap("maps/test_map.map")) {
+		for (int layer = 0; layer < objects.size(); layer++) {
+			for (int i = 0; i < objects[layer].size(); i++) {
+				if (objects[layer][i]->getObjectType() == ObjectType::hero) {
+					hero = objects[layer][i];
+				}
+			}
+		}
+	}
 
 	std::vector<std::vector<Object *>> * getObjectsBuffer() {
 		return &objects;
@@ -132,6 +153,10 @@ public:
 		processObjectSpeed();
 		processCollisionFrame();
 		processEventBuffer();
+	}
+
+	Object * getHero() {
+		return hero;
 	}
 
 };

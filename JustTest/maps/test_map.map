@@ -10,12 +10,12 @@ object yoba
     position 200 200
     origin_mode auto
     origin 0 0
-    object_type null
+    object_type hero
     collision_type null
     sprite_type null
     animation_type null
 
-object yoba
+object circle_stone
     layer 0
     position -200 -200
     origin_mode auto

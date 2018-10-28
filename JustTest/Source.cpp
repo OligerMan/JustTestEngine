@@ -73,6 +73,20 @@ void gameCycle() {
 			}
 		}
 
+		game_map1.getHero()->setSpeed(Point(0, 0));
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			game_map1.getHero()->changeSpeed(Point(0, -0.1));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			game_map1.getHero()->changeSpeed(Point(-0.1, 0));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			game_map1.getHero()->changeSpeed(Point(0, 0.1));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			game_map1.getHero()->changeSpeed(Point(0.1, 0));
+		}
+
 		window.display();
 	}
 }

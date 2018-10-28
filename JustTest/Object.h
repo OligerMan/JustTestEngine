@@ -3,6 +3,7 @@
 #include "Collision.h"
 #include "ObjectTypes.h"
 #include "VisualInfo.h"
+#include "UnitInfo.h"
 
 class Object {
 
@@ -10,6 +11,7 @@ class Object {
 
 	CollisionType object_col_type;
 	VisualInfo vis_info;
+	UnitInfo unit_info;
 	ObjectType object_type;
 
 public:
@@ -121,6 +123,10 @@ public:
 
 	ObjectType getObjectType() {
 		return object_type;
+	}
+
+	UnitInfo * getUnitInfo() {
+		return &unit_info;
 	}
 };
 

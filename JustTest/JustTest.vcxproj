@@ -116,6 +116,7 @@
     <ClInclude Include="EventBuffer.h" />
     <ClInclude Include="EventTypes.h" />
     <ClInclude Include="FileSearch.h" />
+    <ClInclude Include="GameConstants.h" />
     <ClInclude Include="GeometryComponents.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUIParser.h" />
@@ -125,6 +126,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="UnitInfo.h" />
     <ClInclude Include="VisualController.h" />
     <ClInclude Include="VisualInfo.h" />
   </ItemGroup>

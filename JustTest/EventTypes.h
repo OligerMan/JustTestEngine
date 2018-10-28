@@ -36,6 +36,9 @@ int is_event_type_exists(std::string example) {
 }
 
 EventType getEventType(CollisionType type1, CollisionType type2){
+	if ((int)type1 > (int)type2) {
+		std::swap(type1, type2);
+	}
 	if (type1 == stone && type2 == stone) {
 		return default_collision;
 	}

@@ -1,17 +1,18 @@
-﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'e:\projects\justtest\justtestengine\debug\justtest.pdb' because it is being used by another process.
-  Source.cpp
+﻿  Source.cpp
 e:\projects\justtest\justtestengine\justtest\settings.h(41): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\settings.h(44): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\collision.h(39): warning C4018: '>': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\collision.h(70): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\collision.h(130): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\collision.h(131): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\map.h(48): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\map.h(49): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\map.h(50): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\map.h(85): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\map.h(111): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\map.h(112): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(51): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(52): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(53): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(98): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(124): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(125): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(134): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(135): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\visualcontroller.h(30): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\visualcontroller.h(40): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\visualcontroller.h(50): warning C4018: '<': signed/unsigned mismatch
@@ -38,5 +39,6 @@ e:\projects\justtest\justtestengine\justtest\guiparser.h(85): warning C4800: 'st
               _Ty=Object *
           ]
 e:\projects\justtest\justtestengine\justtest\source.cpp(20): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  LINK : E:\Projects\JustTest\JustTestEngine\Debug\JustTest.exe not found or not built by the last incremental link; performing full link
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\Debug\JustTest.exe
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\Debug\JustTest.pdb (Partial PDB)
