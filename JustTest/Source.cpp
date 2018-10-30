@@ -73,19 +73,29 @@ void gameCycle() {
 			}
 		}
 
-		game_map1.getHero()->setSpeed(Point(0, 0));
+		double hero_speed = consts.getDefualtHeroSpeed();
+		Object * hero_object = game_map1.getHero();
+		hero_object->setSpeed(Point(0, 0));
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-			game_map1.getHero()->changeSpeed(Point(0, -0.1));
+			hero_object->changeSpeed(Point(0, -1));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-			game_map1.getHero()->changeSpeed(Point(-0.1, 0));
+			hero_object->changeSpeed(Point(-1, 0));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-			game_map1.getHero()->changeSpeed(Point(0, 0.1));
+			hero_object->changeSpeed(Point(0, 1));
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-			game_map1.getHero()->changeSpeed(Point(0.1, 0));
+			hero_object->changeSpeed(Point(1, 0));
 		}
+		hero_object->setSpeed(hero_object->getSpeed().getNormal() * hero_speed);
+
+		// viewport positioning
+		const double view_speed_coef = 0.006;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
+		Point hero_position = hero_object->getPosition();
+		Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef;
+		view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
+		window.setView(view1);
 
 		window.display();
 	}

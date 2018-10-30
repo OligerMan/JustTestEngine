@@ -7,32 +7,48 @@
 
 void fixCollision(Object * obj1, Object * obj2) { 
 	const double min_speed = 0.1;
+	const Point eps_speed(0.01, 0.01);
 
 	CollisionModel * col1 = obj1->getCollisionModel();
 	CollisionModel * col2 = obj2->getCollisionModel();
 
-	Point speed1 = col1->getSpeed();
-	Point speed2 = col2->getSpeed();
+	Point tmp_speed1 = col1->getSpeed();
+	Point tmp_speed2 = col2->getSpeed();
+
+	Point speed1 = tmp_speed1, speed2 = tmp_speed2;
+	Point origin1 = col1->getOrigin(), origin2 = col2->getOrigin();
+
 
 	// set previous position and add to it half of speed
 
-	speed1 /= 2;
-	speed2 /= 2;
-	col1->changePosition(Point() - speed1);
-	col2->changePosition(Point() - speed2);
+	tmp_speed1 /= 2;
+	tmp_speed2 /= 2;
+	col1->changePosition(Point() - tmp_speed1);
+	col2->changePosition(Point() - tmp_speed2);
 	
-	while (speed1.getLength() > min_speed || speed2.getLength() > min_speed) {
-		speed1 /= 2;
-		speed2 /= 2;
+	while (tmp_speed1.getLength() > min_speed || tmp_speed2.getLength() > min_speed) {
+		tmp_speed1 /= 2;
+		tmp_speed2 /= 2;
 		if (checkModelCollision(col1, col2)) {
-			col1->changePosition(Point() - speed1);
-			col2->changePosition(Point() - speed2);
+			col1->changePosition(Point() - tmp_speed1);
+			col2->changePosition(Point() - tmp_speed2);
 		}
 		else {
-			col1->changePosition(Point() + speed1);
-			col2->changePosition(Point() + speed2);
+			col1->changePosition(Point() + tmp_speed1);
+			col2->changePosition(Point() + tmp_speed2);
 		}
 	}
+
+	Point pos1 = col1->getPosition();
+	Point pos2 = col2->getPosition();
+
+	Point normal_vect = (pos1 - pos2).getNormal();
+	normal_vect = Point(normal_vect.y, -normal_vect.x);
+
+	Point normal_speed1 = (normal_vect * (normal_vect.x * (speed1 - tmp_speed1).x + normal_vect.y * (speed1 - tmp_speed1).y));
+	col1->changePosition(normal_speed1);
+	Point normal_speed2 = (normal_vect * (normal_vect.x * (speed2 - tmp_speed2).x + normal_vect.y * (speed2 - tmp_speed2).y));
+	col2->changePosition(normal_speed2);
 }
 
 class Map {

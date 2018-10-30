@@ -1,12 +1,13 @@
 #pragma once
-//#include <SFML\Graphics.hpp>
+#include <SFML\Graphics.hpp>
 
 #include <math.h>
 
 struct Point {
 	double x = 0.0, y = 0.0;
 
-	//Point(const sf::Vector2i & vector) : x(vector.x), y(vector.y) {}
+	Point(const sf::Vector2i & vector) : x(vector.x), y(vector.y) {}
+	Point(const sf::Vector2f & vector) : x(vector.x), y(vector.y) {}
 	
 	Point & operator = (const Point & p) = default;
 
@@ -89,6 +90,9 @@ struct Point {
 
 	Point normalize() {
 		double length = getLength();
+		if (length == 0) {
+			return Point();
+		}
 		x /= length;
 		y /= length;
 
