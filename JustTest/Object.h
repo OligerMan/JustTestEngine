@@ -62,7 +62,7 @@ public:
 	}
 
 	int getFrameNumber() {
-		return vis_info.frame_num;
+		return vis_info.frame_num / vis_info.frame_duration;
 	}
 
 	void frameIncrement() {
@@ -127,6 +127,10 @@ public:
 
 	UnitInfo * getUnitInfo() {
 		return &unit_info;
+	}
+
+	void setAnimationType(AnimationType animation_type) {
+		vis_info.animation_type = animation_type;
 	}
 };
 

@@ -11,6 +11,7 @@ class Settings {
 	bool console_enabled = true;
 	bool error_output_enabled = true;
 	bool redactor_mode = false;
+	bool gamepad_debug_output = true;
 
 	bool is_settings_loaded = false;
 
@@ -48,6 +49,9 @@ public:
 				}
 				if (setting == "window_width") {
 					window_width = std::stoi(value);
+				}
+				if (setting == "gamepad_debug") {
+					gamepad_debug_output = std::stoi(value);
 				}
 				if (setting == "config_end") {
 					is_settings_loaded = true;
@@ -88,6 +92,10 @@ public:
 
 	void setRedactorMode(bool state) {
 		redactor_mode = state;
+	}
+
+	bool isGamepadDebugEnabled() {
+		return gamepad_debug_output;
 	}
 };
 

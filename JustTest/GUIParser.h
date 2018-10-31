@@ -210,7 +210,8 @@ bool gui_parser(std::string path, std::vector<std::vector<Object *>> * output) {
 					(CollisionType)collision_type_index,
 					VisualInfo(
 					(SpriteType)sprite_type_index,
-						(AnimationType)animation_type_index
+						(AnimationType)animation_type_index,
+						1
 					)
 				);
 

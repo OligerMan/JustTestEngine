@@ -1,11 +1,10 @@
 ﻿  Source.cpp
-e:\projects\justtest\justtestengine\justtest\settings.h(41): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\justtest\justtestengine\justtest\settings.h(44): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\settings.h(42): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\settings.h(45): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\settings.h(54): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\collision.h(31): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\justtest\justtestengine\justtest\collision.h(130): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\collision.h(131): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\collision.h(156): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\collision.h(157): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\map.h(113): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\justtest\justtestengine\justtest\visualcontroller.h(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\justtest\justtestengine\justtest\visualcontroller.h(114): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -18,8 +17,8 @@ e:\projects\justtest\justtestengine\justtest\guiparser.h(85): warning C4800: 'st
               _Ty=Object *
           ]
 e:\projects\justtest\justtestengine\justtest\guimanager.h(24): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(20): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(97): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(130): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   LINK : E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.exe not found or not built by the last incremental link; performing full link
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.exe
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.pdb (Partial PDB)

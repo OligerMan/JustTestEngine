@@ -2,7 +2,9 @@
 #include "GUIVisualController.h"
 #include "GUIManager.h"
 
-
+enum XBOXGamepadButtons {
+	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
+};
 
 void gameCycle() {
 	collision_type_init();
@@ -76,18 +78,49 @@ void gameCycle() {
 		double hero_speed = consts.getDefualtHeroSpeed();
 		Object * hero_object = game_map1.getHero();
 		hero_object->setSpeed(Point(0, 0));
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-			hero_object->changeSpeed(Point(0, -1));
+		hero_object->setAnimationType(hold_anim);
+		hero_object->setAngle(0);
+
+		if (sf::Joystick::isConnected(0)) {         // gamepad input
+			hero_object->setSpeed(Point(
+				sf::Joystick::getAxisPosition(0, sf::Joystick::X), 
+				sf::Joystick::getAxisPosition(0, sf::Joystick::Y)));
+			if (abs(hero_object->getSpeed().x) < 1 && abs(hero_object->getSpeed().y) < 1) {
+				hero_object->setSpeed(Point());
+			}
+			else {
+				hero_object->setAnimationType(move_anim);
+			}
+
+			int buttons_count = sf::Joystick::getButtonCount(0);
+			for (int i = 0; i < buttons_count; i++) {
+				if (sf::Joystick::isButtonPressed(0, i)) {
+					if (settings.isGamepadDebugEnabled()) {
+						std::cout << "Gamepad button number " << i << " is pressed" << std::endl;
+					}
+				}
+			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-			hero_object->changeSpeed(Point(-1, 0));
+		else {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+				hero_object->changeSpeed(Point(0, -1));
+				hero_object->setAnimationType(move_anim);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+				hero_object->changeSpeed(Point(-1, 0));
+				hero_object->setAnimationType(move_anim);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+				hero_object->changeSpeed(Point(0, 1));
+				hero_object->setAnimationType(move_anim);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+				hero_object->changeSpeed(Point(1, 0));
+				hero_object->setAnimationType(move_anim);
+			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-			hero_object->changeSpeed(Point(0, 1));
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-			hero_object->changeSpeed(Point(1, 0));
-		}
+		
+		hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
 		hero_object->setSpeed(hero_object->getSpeed().getNormal() * hero_speed);
 
 		// viewport positioning

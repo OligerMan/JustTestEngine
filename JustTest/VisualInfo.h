@@ -3,6 +3,7 @@
 enum SpriteType {
 	null_sprite,
 	stone_sprite,
+	hero_sprite,
 
 	COUNT_SPRITE
 };
@@ -14,6 +15,7 @@ void sprite_type_init() {
 
 	sprite_type[null_sprite] = "null";
 	sprite_type[stone_sprite] = "stone";
+	sprite_type[hero_sprite] = "hero";
 }
 
 int is_sprite_type_exists(std::string example) {
@@ -63,8 +65,9 @@ struct VisualInfo {
 	SpriteType object_spr_type = SpriteType::null_sprite;
 	AnimationType animation_type = AnimationType::null_anim;
 	int frame_num = 0;
+	int frame_duration = 1;
 
 	VisualInfo() {}
 
-	VisualInfo(SpriteType sprite_type, AnimationType animation_type) : object_spr_type(sprite_type), animation_type(animation_type) {}
+	VisualInfo(SpriteType sprite_type, AnimationType animation_type, int frame_duration) : frame_duration(frame_duration), object_spr_type(sprite_type), animation_type(animation_type) {}
 };

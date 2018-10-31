@@ -3,6 +3,8 @@
 
 #include <math.h>
 
+#define PI 3.14159265
+
 struct Point {
 	double x = 0.0, y = 0.0;
 

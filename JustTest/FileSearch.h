@@ -12,7 +12,7 @@ std::vector<std::string> * getFileList(std::string folder) {
 	FILE * pipe;
 	char buf[BUFSIZ];
 
-	if ((pipe = _popen(("dir " + folder + " /B /ON").c_str(), "r")) == NULL) {
+	if ((pipe = _popen(("dir " + folder + " /B /N").c_str(), "r")) == NULL) {
 		return output;
 	}
 

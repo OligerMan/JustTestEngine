@@ -32,6 +32,7 @@ settings_start
 			- collision_type <one of strings, defined in ObjectTypes.h>
 			- sprite_type <one of strings, defined in VisualInfo.h>
 			- animation_type <one of strings, defined in VisualInfo.h>
+			- frame_duration <duration of frames in animation>
  object_end
  -- Objects block end
 */
@@ -89,12 +90,13 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 				Point 
 					position, 
 					origin;
-				std::string 
+				std::string
 					origin_mode,
-					object_type, 
-					collision_type, 
-					sprite_type, 
-					animation_type;
+					object_type,
+					collision_type,
+					sprite_type,
+					animation_type,
+					frame_duration_string;
 
 				Object * object = new Object();
 
@@ -188,12 +190,24 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 						continue;
 					}
 				}
+				map_file >> input;
+				if (input == "frame_duration") {
+					map_file >> frame_duration_string;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- animation_type block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
 
-				int 
+				int
 					object_type_index = is_object_type_exists(object_type),
 					collision_type_index = is_collision_type_exists(collision_type),
 					sprite_type_index = is_sprite_type_exists(sprite_type),
-					animation_type_index = is_animation_type_exists(animation_type);
+					animation_type_index = is_animation_type_exists(animation_type),
+					frame_duration = std::stoi(frame_duration_string);
 
 				if (object_type_index == -1 || collision_type_index == -1 || sprite_type_index == -1 || animation_type_index == -1) {
 					if (settings.isErrorOutputEnabled()) {
@@ -209,7 +223,8 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 					(CollisionType)collision_type_index, 
 					VisualInfo(
 						(SpriteType)sprite_type_index, 
-						(AnimationType)animation_type_index
+						(AnimationType)animation_type_index,
+						frame_duration
 					)
 				);
 
