@@ -15,7 +15,7 @@ class GUIVisualController{
 
 	void uploadTextures(std::string path) {
 		if (settings.isSpriteDebugOutputEnabled()) {
-			std::cout << " -- GUI sprites loading debug output -- " << std::endl;
+			std::cout << " -- GUI sprites loading start -- " << std::endl;
 		}
 
 		std::vector<std::string> * object_names = getFileList(path);
@@ -48,6 +48,9 @@ class GUIVisualController{
 				object_textures.push_back(animation);
 			}
 			texture_buffer.push_back(object_textures);
+		}
+		if (settings.isSpriteDebugOutputEnabled()) {
+			std::cout << " -- GUI sprites loading completed -- " << std::endl;
 		}
 		return;
 	}

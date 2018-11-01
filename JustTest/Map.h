@@ -7,7 +7,7 @@
 
 void fixCollision(Object * obj1, Object * obj2) { 
 	const double min_speed = 0.1;
-	const Point eps_speed(0.01, 0.01);
+	Point eps_speed(0.01, 0.01);
 
 	CollisionModel * col1 = obj1->getCollisionModel();
 	CollisionModel * col2 = obj2->getCollisionModel();
@@ -49,6 +49,11 @@ void fixCollision(Object * obj1, Object * obj2) {
 	col1->changePosition(normal_speed1);
 	Point normal_speed2 = (normal_vect * (normal_vect.x * (speed2 - tmp_speed2).x + normal_vect.y * (speed2 - tmp_speed2).y));
 	col2->changePosition(normal_speed2);
+
+	if (checkModelCollision(col1, col2)) {
+		col1->changePosition((col1->getPosition() - col2->getPosition()).getNormal() * eps_speed.getLength() * 10); 
+		col2->changePosition((col2->getPosition() - col1->getPosition()).getNormal() * eps_speed.getLength() * 10);
+	}
 }
 
 class Map {
@@ -146,7 +151,9 @@ class Map {
 
 public:
 
-	Map() : objects(parseMap("maps/test_map.map")) {
+	Map() {}
+
+	Map(std::string path) : objects(parseMap(path)) {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
 				if (objects[layer][i]->getObjectType() == ObjectType::hero) {

@@ -21,7 +21,7 @@ class VisualController {
 
 	void uploadTextures(std::string path) {
 		if (settings.isSpriteDebugOutputEnabled()) {
-			std::cout << " -- Sprites loading debug output -- " << std::endl;
+			std::cout << " -- Sprites loading start -- " << std::endl;
 		}
 
 		std::vector<std::string> * object_names = getFileList(path);
@@ -29,7 +29,7 @@ class VisualController {
 		texture_buffer.resize((int)COUNT_OBJECT);
 		for (int obj_cnt = 0; obj_cnt < object_names->size(); obj_cnt++) {
 			if (settings.isSpriteDebugOutputEnabled()) {
-				std::cout << "GUI object " << (*object_names)[obj_cnt] << " sprite loading" << std::endl;
+				std::cout << "Object " << (*object_names)[obj_cnt] << " sprite loading" << std::endl;
 			}
 
 			//get animation set
@@ -58,6 +58,10 @@ class VisualController {
 					texture_buffer[is_object_type_exists((*object_names)[obj_cnt])][is_animation_type_exists((*anim_set)[anim_cnt])] = animation;
 				}
 			}
+		}
+
+		if (settings.isSpriteDebugOutputEnabled()) {
+			std::cout << " -- Sprites loading completed -- " << std::endl;
 		}
 		return;
 	}

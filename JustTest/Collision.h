@@ -16,6 +16,7 @@ class CollisionModel {
 	double angle = 0;
 
 	Point speed;
+	bool is_static = false;
 
 	std::vector<Circle> col_model;
 
@@ -24,7 +25,7 @@ public:
 	CollisionModel() {}
 
 	CollisionModel(std::string object_path) {
-		col_model = collisionParse(object_path);
+		col_model = collisionParse(object_path, is_static);
 	}
 
 	int getModelSize() {
@@ -93,7 +94,9 @@ public:
 	}
 
 	void changePosition(Point difference) {
-		position += difference;
+		if(!is_static){
+			position += difference;
+		}
 	}
 	
 	double getAngle() {

@@ -34,6 +34,7 @@ enum AnimationType {
 	attack1_anim,
 	attack2_anim, 
 	attack3_anim,
+	selected_anim,
 
 
 	COUNT_ANIMATION
@@ -50,6 +51,7 @@ void animation_type_init() {
 	animation_type[attack1_anim] = "attack1";
 	animation_type[attack2_anim] = "attack2";
 	animation_type[attack3_anim] = "attack3";
+	animation_type[selected_anim] = "selected";
 }
 
 int is_animation_type_exists(std::string example) {

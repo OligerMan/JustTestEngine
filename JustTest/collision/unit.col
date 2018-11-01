@@ -1,3 +1,6 @@
+settings_start
+    is_static 0
+settings_end
 collision_start
 
 element test_circle

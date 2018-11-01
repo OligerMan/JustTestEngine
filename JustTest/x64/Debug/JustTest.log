@@ -2,23 +2,27 @@
 e:\projects\justtest\justtestengine\justtest\settings.h(42): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\settings.h(45): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\settings.h(54): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\justtest\justtestengine\justtest\collision.h(31): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\justtest\justtestengine\justtest\collision.h(130): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\collision.h(131): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\map.h(113): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\justtest\justtestengine\justtest\visualcontroller.h(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\visualcontroller.h(114): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\visualcontroller.h(115): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(107): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\collisionparser.h(48): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\collision.h(32): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\justtest\justtestengine\justtest\collision.h(133): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\collision.h(134): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\map.h(118): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(117): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(118): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\visualcontroller.h(119): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(109): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\guivisualcontroller.h(110): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\justtest\justtestengine\justtest\guiparser.h(85): warning C4800: 'std::vector<std::vector<Object *,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>> **': forcing value to bool 'true' or 'false' (performance warning)
           with
           [
               _Ty=Object *
           ]
 e:\projects\justtest\justtestengine\justtest\guimanager.h(24): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(130): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  LINK : E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.exe not found or not built by the last incremental link; performing full link
+e:\projects\justtest\justtestengine\justtest\source.cpp(29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(106): warning C4305: 'argument': truncation from 'const double' to 'float'
+e:\projects\justtest\justtestengine\justtest\source.cpp(109): warning C4305: 'argument': truncation from 'const double' to 'float'
+e:\projects\justtest\justtestengine\justtest\source.cpp(112): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(115): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(169): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.exe
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.pdb (Partial PDB)

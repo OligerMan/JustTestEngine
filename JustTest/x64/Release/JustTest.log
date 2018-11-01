@@ -1,27 +1,2 @@
-﻿  Source.cpp
-e:\projects\justtest\justtestengine\justtest\Settings.h(41): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\justtest\justtestengine\justtest\Settings.h(44): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\justtest\justtestengine\justtest\Collision.h(31): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\justtest\justtestengine\justtest\Collision.h(130): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\Collision.h(131): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\Map.h(113): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\justtest\justtestengine\justtest\VisualController.h(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\VisualController.h(114): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\VisualController.h(115): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\GUIVisualController.h(106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\GUIVisualController.h(107): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\GUIParser.h(85): warning C4800: 'std::vector<std::vector<Object *,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>> **': forcing value to bool 'true' or 'false' (performance warning)
-          with
-          [
-              _Ty=Object *
-          ]
-e:\projects\justtest\justtestengine\justtest\GUIManager.h(24): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-Source.cpp(20): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-Source.cpp(114): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating code
-  40 of 1205 functions ( 3.3%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    7 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Release\JustTest.exe
+﻿  JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Release\JustTest.exe
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Release\JustTest.pdb (Full PDB)

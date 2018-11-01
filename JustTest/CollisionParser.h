@@ -13,6 +13,9 @@ I'm planning to create collision model from file
 Template for file:
 
  -- Start of description -- 
+ settings_start
+	is_static <0 or 1>
+ settings_end
  collision_start
      - collision models must be described by such template:
 	     element <element name>
@@ -23,7 +26,7 @@ Template for file:
  -- End of description --
 */
 
-std::vector<Circle> collisionParse(std::string path) {
+std::vector<Circle> collisionParse(std::string path, bool & is_static) {
 	std::ifstream collision_file;
 	collision_file.open(path);
 
@@ -38,7 +41,33 @@ std::vector<Circle> collisionParse(std::string path) {
 
 	std::string input;
 	collision_file >> input;
+	if (input == "settings_start") {
+		collision_file >> input;
+		if (input == "is_static") {
+			collision_file >> input;
+			is_static = std::stoi(input);
+		}
+		else {
+			if (settings.isErrorOutputEnabled()) {
+				std::cout << "Collision file " << path << " is invalid" << std::endl;
+			}
+		}
+		collision_file >> input;
+		if (input == "settings_end") {
 
+		}
+		else {
+			if (settings.isErrorOutputEnabled()) {
+				std::cout << "Collision file " << path << " is invalid" << std::endl;
+			}
+		}
+	}
+	else {
+		if (settings.isErrorOutputEnabled()) {
+			std::cout << "Collision file's settings " << path << " are invalid" << std::endl;
+		}
+	}
+	collision_file >> input;
 	if (input == "collision_start") {
 		while (input != "collision_end") {
 			collision_file >> input;

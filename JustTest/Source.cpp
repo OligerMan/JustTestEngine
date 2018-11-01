@@ -2,6 +2,9 @@
 #include "GUIVisualController.h"
 #include "GUIManager.h"
 
+#include <chrono>
+#include <Windows.h>
+
 enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
 };
@@ -13,6 +16,10 @@ void gameCycle() {
 	sprite_type_init();
 	animation_type_init();
 
+	std::chrono::time_point<std::chrono::system_clock> frame_start = std::chrono::system_clock::now();
+	std::chrono::time_point<std::chrono::system_clock> frame_end = std::chrono::system_clock::now();
+	int frame_latency = 1;
+
 	if (!settings.isLoaded()) {
 		std::cout << "Settings file error, enabling default settings" << std::endl;
 		settings.setDefaults();
@@ -23,9 +30,18 @@ void gameCycle() {
 
 	VisualController visual_ctrl;
 	GUIVisualController gui_visual_ctrl;
-	Map game_map1;
-	GUIManager gui_manager;
+	Map game_map1("maps/test_map.map");
 
+	if (settings.isSpriteDebugOutputEnabled() && settings.isRedactorMode()) {
+		std::cout << "Redactor mode objects upload" << std::endl;
+	}
+
+	Map object_presets("redactor_resources/object_templates.map");
+	GUIManager gui_manager(object_presets.getObjectsBuffer());
+
+	if (settings.isSpriteDebugOutputEnabled() && settings.isRedactorMode()) {
+		std::cout << "Redactor mode objects upload" << std::endl;
+	}
 
 	window.setView(view1);
 
@@ -34,6 +50,8 @@ void gameCycle() {
 
 	while (window.isOpen())
 	{
+		//frame_start = std::chrono::system_clock::now();
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -81,56 +99,85 @@ void gameCycle() {
 		hero_object->setAnimationType(hold_anim);
 		hero_object->setAngle(0);
 
-		if (sf::Joystick::isConnected(0)) {         // gamepad input
-			hero_object->setSpeed(Point(
-				sf::Joystick::getAxisPosition(0, sf::Joystick::X), 
-				sf::Joystick::getAxisPosition(0, sf::Joystick::Y)));
-			if (abs(hero_object->getSpeed().x) < 1 && abs(hero_object->getSpeed().y) < 1) {
-				hero_object->setSpeed(Point());
+		
+		if (settings.isRedactorMode()) {
+			const double viewport_speed = 0.1;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+				view1.move(0, -viewport_speed);
 			}
-			else {
-				hero_object->setAnimationType(move_anim);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+				view1.move(-viewport_speed, 0);
 			}
-
-			int buttons_count = sf::Joystick::getButtonCount(0);
-			for (int i = 0; i < buttons_count; i++) {
-				if (sf::Joystick::isButtonPressed(0, i)) {
-					if (settings.isGamepadDebugEnabled()) {
-						std::cout << "Gamepad button number " << i << " is pressed" << std::endl;
-					}
-				}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+				view1.move(0, viewport_speed);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+				view1.move(viewport_speed, 0);
 			}
 		}
 		else {
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			if (sf::Joystick::isConnected(0)) {         // gamepad input
+				hero_object->setSpeed(Point(
+					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+					sf::Joystick::getAxisPosition(0, sf::Joystick::Y)));
+				if (abs(hero_object->getSpeed().x) < 1 && abs(hero_object->getSpeed().y) < 1) {
+					hero_object->setSpeed(Point());
+				}
+				else {
+					hero_object->setAnimationType(move_anim);
+				}
+
+				int buttons_count = sf::Joystick::getButtonCount(0);
+				for (int i = 0; i < buttons_count; i++) {
+					if (sf::Joystick::isButtonPressed(0, i)) {
+						if (settings.isGamepadDebugEnabled()) {
+							std::cout << "Gamepad button number " << i << " is pressed" << std::endl;
+						}
+					}
+				}
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 				hero_object->changeSpeed(Point(0, -1));
 				hero_object->setAnimationType(move_anim);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 				hero_object->changeSpeed(Point(-1, 0));
 				hero_object->setAnimationType(move_anim);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 				hero_object->changeSpeed(Point(0, 1));
 				hero_object->setAnimationType(move_anim);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 				hero_object->changeSpeed(Point(1, 0));
 				hero_object->setAnimationType(move_anim);
 			}
+
+			hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
+			hero_object->setSpeed(hero_object->getSpeed().getNormal() * hero_speed);
 		}
 		
-		hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
-		hero_object->setSpeed(hero_object->getSpeed().getNormal() * hero_speed);
 
 		// viewport positioning
-		const double view_speed_coef = 0.006;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
-		Point hero_position = hero_object->getPosition();
-		Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef;
-		view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
+		if (settings.isRedactorMode()) {
+
+		}
+		else {
+			const double view_speed_coef = 0.006;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
+			Point hero_position = hero_object->getPosition();
+			Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef;
+			view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
+		}
 		window.setView(view1);
 
 		window.display();
+
+		/*frame_end = std::chrono::system_clock::now();
+		int frame_duration = std::chrono::duration_cast<std::chrono::milliseconds>(frame_end - frame_start).count();
+		if (frame_duration > 5) {
+			std::cout << "Perfomance warning" << std::endl;
+		}*/
+		//Sleep(std::max(0, frame_latency - frame_duration));
 	}
 }
 

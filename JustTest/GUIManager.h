@@ -57,6 +57,12 @@ public:
 
 	GUIManager() {}
 
+	GUIManager(std::vector<std::vector<Object*>> * redactor_mode_objects) {
+		if (settings.isRedactorMode()) {
+
+		}
+	}
+
 	bool loadFromFile(std::string path) {
 		gui_parser(path, &gui_elements);
 	}
