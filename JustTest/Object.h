@@ -65,6 +65,10 @@ public:
 		return vis_info.frame_num / vis_info.frame_duration;
 	}
 
+	int getFrameDuration() {
+		return vis_info.frame_duration;
+	}
+
 	void frameIncrement() {
 		vis_info.frame_num++;
 	}

@@ -46,7 +46,6 @@ class VisualController {
 				std::vector<std::string> * textures_set = getFileList(path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*anim_set)[anim_cnt]));
 				std::vector<sf::Texture> animation(textures_set->size());
 
-
 				for (int i = 0; i < textures_set->size(); i++) {
 					if (settings.isSpriteDebugOutputEnabled()) {
 						std::cout << "        >> Sprite " << (*textures_set)[i] << " is loading" << std::endl;
@@ -59,9 +58,8 @@ class VisualController {
 				}
 			}
 		}
-
 		if (settings.isSpriteDebugOutputEnabled()) {
-			std::cout << " -- Sprites loading completed -- " << std::endl;
+			std::cout << " -- Sprites loading completed -- " << std::endl << std::endl;
 		}
 		return;
 	}
@@ -96,31 +94,34 @@ public:
 		return is_active;
 	}
 
+	void drawObject(Object * object, sf::RenderWindow * window) {
+		int obj_type = object->getObjectSpriteType();
+		int anim_type = object->getObjectAnimationType();
+		int frame_num = object->getFrameNumber();
+
+		Point position = object->getPosition();
+		Point origin = object->getOrigin();
+		double angle = object->getAngle();
+
+		sf::Sprite * sprite = &sprite_buffer[obj_type][anim_type];
+
+		sprite->setTexture(texture_buffer[obj_type][anim_type][frame_num % texture_buffer[obj_type][anim_type].size()]);
+		sprite->setPosition(position.x, position.y);
+		sprite->setRotation(angle);
+		sprite->setOrigin(origin.x, origin.y);
+
+		object->frameIncrement();
+
+		window->draw(*sprite);
+	}
+
 	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects) {
-		window->clear(sf::Color::Black);
 
 		for (int layer = 0; layer < objects->size(); layer++) {
 			for (int i = 0; i < (*objects)[layer].size(); i++) {
 				Object * object = (*objects)[layer][i];
 
-				int obj_type = object->getObjectSpriteType();
-				int anim_type = object->getObjectAnimationType();
-				int frame_num = object->getFrameNumber();
-
-				Point position = object->getPosition();
-				Point origin = object->getOrigin();
-				double angle = object->getAngle();
-
-				sf::Sprite * sprite = &sprite_buffer[obj_type][anim_type];
-
-				sprite->setTexture(texture_buffer[obj_type][anim_type][frame_num % texture_buffer[obj_type][anim_type].size()]);
-				sprite->setPosition(position.x, position.y);
-				sprite->setRotation(angle);
-				sprite->setOrigin(origin.x, origin.y);
-
-				object->frameIncrement();
-
-				window->draw(*sprite);
+				drawObject(object, window);
 			}
 		}
 

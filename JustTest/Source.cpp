@@ -40,7 +40,7 @@ void gameCycle() {
 	GUIManager gui_manager(object_presets.getObjectsBuffer());
 
 	if (settings.isSpriteDebugOutputEnabled() && settings.isRedactorMode()) {
-		std::cout << "Redactor mode objects upload" << std::endl;
+		std::cout << "Redactor mode objects upload completed" << std::endl;
 	}
 
 	window.setView(view1);
@@ -69,10 +69,14 @@ void gameCycle() {
 			}
 		}
 
+		Point viewport_pos = Point(view1.getCenter().x, view1.getCenter().y);
+
 		// game cycle
 		if (is_game_cycle) {
+			window.clear(sf::Color::Black);
 			is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
-			is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer()) || is_game_cycle;
+			is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), viewport_pos) && is_game_cycle;
+			
 		}
 		// input handling
 
@@ -81,14 +85,24 @@ void gameCycle() {
 		sf::Vector2i window_pos = window.getPosition();
 		cursor_pos = Point(mouse_pos.x - settings.getWindowWidth() / 2 - window.getPosition().x, mouse_pos.y - settings.getWindowHeight() / 2 - window.getPosition().y);
 
+		if (settings.isRedactorMode() && is_game_cycle) {
+			if (gui_manager.getSelectedObject() != nullptr) {
+
+				Object * object = new Object(*gui_manager.getSelectedObject());
+				object->setPosition(cursor_pos + viewport_pos);
+				visual_ctrl.drawObject(object, &window);
+				delete object;
+			}
+		}
+
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-			if (!gui_manager.processFrame(cursor_pos)) {
+			if (!gui_manager.processFrame(cursor_pos, viewport_pos)) {
 				game_map1.processFrame(cursor_pos);
 			}
 		}
 		else {
-			if (!gui_manager.processFrame(Point(10000000, 100000000))) {
+			if (!gui_manager.processFrame(Point(10000000, 100000000), viewport_pos)) {
 				game_map1.processFrame(Point(10000000, 100000000));
 			}
 		}
@@ -113,6 +127,10 @@ void gameCycle() {
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 				view1.move(viewport_speed, 0);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
+				saveMap("maps/test_map.map", game_map1.getObjectsBuffer());
+				return;
 			}
 		}
 		else {

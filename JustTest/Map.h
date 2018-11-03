@@ -101,7 +101,6 @@ class Map {
 				break;
 			case default_collision:
 
-				
 				obj1->getUnitInfo()->dealDamage(std::max(0.0, (obj1->getSpeed().getLength() - thresh) * coef));
 				obj2->getUnitInfo()->dealDamage(std::max(0.0, (obj2->getSpeed().getLength() - thresh) * coef));
 				break;
@@ -169,6 +168,7 @@ public:
 
 	void addObject(Object * object, int layer) {
 		objects[layer].push_back(object);
+		std::cout << "New object created" << std::endl;
 	}
 
 	void processFrame(Point click) {

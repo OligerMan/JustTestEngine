@@ -252,3 +252,31 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 
 	return output;
 }
+
+void saveMap(std::string path, std::vector<std::vector<Object *>> * objects) {
+	std::ofstream new_map(path);
+
+	new_map.clear();
+	new_map << "settings_start" << std::endl;
+	new_map << "    layers_amount " << objects->size() << std::endl;
+	new_map << "settings_end" << std::endl;
+	new_map << "object_start" << std::endl;
+	for (int layer = 0; layer < objects->size(); layer++) {
+		for (int i = 0; i < (*objects)[layer].size(); i++) {
+			Object * object = (*objects)[layer][i];
+			new_map << "    object " << object_type[object->getObjectType()] << i << std::endl;
+			new_map << "        layer " << layer << std::endl;
+			new_map << "        position " << object->getPosition().x << " " << object->getPosition().y << std::endl;
+			new_map << "        origin_mode auto" << std::endl;
+			new_map << "        origin " << object->getOrigin().x << " " << object->getPosition().y << std::endl;
+			new_map << "        object_type " << object_type[object->getObjectType()] << std::endl;
+			new_map << "        collision_type " << collision_type[object->getObjectCollisionType()] << std::endl;
+			new_map << "        sprite_type " << sprite_type[object->getObjectSpriteType()] << std::endl;
+			new_map << "        animation_type " << animation_type[object->getObjectAnimationType()] << std::endl;
+			new_map << "        frame_duration " << object->getFrameDuration() << std::endl;
+			new_map << std::endl;
+		}
+	}
+	new_map << "object_end" << std::endl;
+	new_map.close();
+}

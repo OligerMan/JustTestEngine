@@ -11,7 +11,7 @@ object yoba_hero
     origin_mode auto
     origin 0 0
     object_type hero
-    collision_type null
+    collision_type unit
     sprite_type hero
     animation_type hold
     frame_duration 100

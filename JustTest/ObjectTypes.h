@@ -7,6 +7,7 @@ enum CollisionType {
 	null_col,
 	stone_col,
 	unit_col,
+	redactor_back_col,
 
 	COUNT_COLLISION
 };
@@ -20,6 +21,7 @@ void collision_type_init() {
 	collision_type[null_col] = "null";
 	collision_type[stone_col] = "stone";
 	collision_type[unit_col] = "unit";
+	collision_type[redactor_back_col] = "redactor_back";
 }
 
 int is_collision_type_exists(std::string example) {
@@ -36,6 +38,7 @@ enum ObjectType {
 	null,
 	stone,
 	hero,
+	redactor_back,
 
 	COUNT_OBJECT
 };
@@ -48,6 +51,8 @@ void object_type_init() {
 	object_type[null] = "null";
 	object_type[stone] = "stone";
 	object_type[hero] = "hero";
+	object_type[redactor_back] = "redactor_back";
+
 }
 
 int is_object_type_exists(std::string example) {

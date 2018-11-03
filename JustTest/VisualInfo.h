@@ -4,6 +4,7 @@ enum SpriteType {
 	null_sprite,
 	stone_sprite,
 	hero_sprite,
+	redactor_back_sprite,
 
 	COUNT_SPRITE
 };
@@ -16,6 +17,7 @@ void sprite_type_init() {
 	sprite_type[null_sprite] = "null";
 	sprite_type[stone_sprite] = "stone";
 	sprite_type[hero_sprite] = "hero";
+	sprite_type[redactor_back_sprite] = "redactor_back";
 }
 
 int is_sprite_type_exists(std::string example) {

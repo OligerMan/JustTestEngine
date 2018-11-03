@@ -20,6 +20,7 @@ class GUIVisualController{
 
 		std::vector<std::string> * object_names = getFileList(path);
 
+		texture_buffer.resize((int)COUNT_OBJECT);
 		for (int obj_cnt = 0; obj_cnt < object_names->size(); obj_cnt++) {
 			if (settings.isSpriteDebugOutputEnabled()) {
 				std::cout << "GUI object " << (*object_names)[obj_cnt] << " sprite loading" << std::endl;
@@ -29,6 +30,7 @@ class GUIVisualController{
 			std::vector<std::string> * anim_set = getFileList(path + "\\" + (*object_names)[obj_cnt]);
 			std::vector<std::vector<sf::Texture>> object_textures;
 
+			texture_buffer[is_object_type_exists((*object_names)[obj_cnt])].resize((int)COUNT_ANIMATION);
 			for (int anim_cnt = 0; anim_cnt < anim_set->size(); anim_cnt++) {
 				if (settings.isSpriteDebugOutputEnabled()) {
 					std::cout << "    >> Animation " << (*anim_set)[anim_cnt] << " is loading" << std::endl;
@@ -45,12 +47,13 @@ class GUIVisualController{
 					std::string sprite_path = (path + "\\" + ((*object_names)[obj_cnt] + "\\" + (*anim_set)[anim_cnt] + "\\" + (*textures_set)[i])).c_str();
 					animation[i].loadFromFile(sprite_path);
 				}
-				object_textures.push_back(animation);
+				if (is_animation_type_exists((*anim_set)[anim_cnt]) != -1 && is_object_type_exists((*object_names)[obj_cnt]) != -1) {
+					texture_buffer[is_object_type_exists((*object_names)[obj_cnt])][is_animation_type_exists((*anim_set)[anim_cnt])] = animation;
+				}
 			}
-			texture_buffer.push_back(object_textures);
 		}
 		if (settings.isSpriteDebugOutputEnabled()) {
-			std::cout << " -- GUI sprites loading completed -- " << std::endl;
+			std::cout << " -- GUI sprites loading completed -- " << std::endl << std::endl;
 		}
 		return;
 	}
@@ -85,7 +88,7 @@ public:
 		return is_active;
 	}
 
-	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects) {  // render for GUI elements
+	bool processFrame(sf::RenderWindow * window, std::vector<std::vector<Object *>> * objects, Point viewport_pos) {  // render for GUI elements
 
 		for (int layer = 0; layer < objects->size(); layer++) {
 			for (int i = 0; i < (*objects)[layer].size(); i++) {
@@ -95,10 +98,10 @@ public:
 				int anim_type = object->getObjectAnimationType();
 				int frame_num = object->getFrameNumber();
 
-				Point position = object->getPosition();
+				Point position = object->getPosition() + viewport_pos;
 				double angle = object->getAngle();
 
-				sf::Sprite * sprite = &sprite_buffer[obj_type][anim_type];
+				sf::Sprite * sprite = &(sprite_buffer[obj_type][anim_type]);
 
 				if ((texture_buffer.size() > obj_type) && (texture_buffer[obj_type].size() > anim_type) && (texture_buffer[obj_type][anim_type].size() > frame_num)) {
 					sprite->setTexture(texture_buffer[obj_type][anim_type][frame_num]);
@@ -107,7 +110,13 @@ public:
 					sprite->setTexture(texture_buffer[0][0][0]);
 				}
 				sprite->setPosition(position.x, position.y);
+				sprite->setOrigin(object->getOrigin().x, object->getOrigin().y);
 				sprite->setRotation(angle);
+
+				if (settings.isRedactorMode() && layer == 1) {
+					float scale_factor = (100 / std::max((float)1.0, std::max(sprite->getLocalBounds().width, sprite->getLocalBounds().height)));
+					sprite->setScale(scale_factor, scale_factor);
+				}
 
 				window->draw(*sprite);
 			}
