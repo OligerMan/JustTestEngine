@@ -109,6 +109,7 @@ struct Point {
 	}
 
 	void rotate(double angle) {
+		angle = angle * PI / 180;
 		Point rotated_point = Point(x, y);
 		rotated_point.x = x * cos(angle) - y * sin(angle);
 		rotated_point.y = x * sin(angle) + y * cos(angle);

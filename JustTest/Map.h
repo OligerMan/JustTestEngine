@@ -83,6 +83,16 @@ class Map {
 		}
 	}
 
+	void garbageCollector() {
+		for (int layer = 0; layer < objects.size(); layer++) {
+			for (int i = 0; i < objects[layer].size(); i++) {
+				if (objects[layer][i]->isDeleted()) {
+					objects[layer].erase(objects[layer].begin() + i);
+				}
+			}
+		}
+	}
+
 	void processEventBuffer() {
 		while (true) {
 			Event buffer_elem = event_buffer.getEvent();
@@ -105,7 +115,12 @@ class Map {
 				obj2->getUnitInfo()->dealDamage(std::max(0.0, (obj2->getSpeed().getLength() - thresh) * coef));
 				break;
 			case clicked:
-				buffer_elem.getFirstObject()->changeAngle(10);
+				if (settings.isRedactorMode()) {
+					buffer_elem.getFirstObject()->deleteObject();
+				}
+				else {
+					buffer_elem.getFirstObject()->changeAngle(10);
+				}
 				break;
 			};
 		}
@@ -117,6 +132,7 @@ class Map {
 			for (int layer = objects.size() - 1; layer >= 0; layer--) {
 				for (int i = 0; i < objects[layer].size(); i++) {
 					if (checkObjectCollision(objects[layer][i], cursor)) {
+
 						if (objects[layer][i] != last_clicked_object) {
 
 							event_buffer.addEvent(clicked, objects[layer][i], nullptr);
@@ -162,12 +178,32 @@ public:
 		}
 	}
 
+	bool isClickable(Point click) {
+		Object * cursor = new Object(click);
+		if (!objects.empty()) {
+			for (int layer = objects.size() - 1; layer >= 0; layer--) {
+				for (int i = 0; i < objects[layer].size(); i++) {
+					if (checkObjectCollision(objects[layer][i], cursor)) {
+						delete cursor;
+						return true;
+					}
+				}
+			}
+		}
+		delete cursor;
+		return false;
+	}
+
 	std::vector<std::vector<Object *>> * getObjectsBuffer() {
 		return &objects;
 	}
 
 	void addObject(Object * object, int layer) {
+		if (objects.size() <= layer) {
+			objects.resize(layer + 1);
+		}
 		objects[layer].push_back(object);
+		last_clicked_object = object;
 		std::cout << "New object created" << std::endl;
 	}
 
@@ -176,6 +212,7 @@ public:
 		processObjectSpeed();
 		processCollisionFrame();
 		processEventBuffer();
+		garbageCollector();
 	}
 
 	Object * getHero() {

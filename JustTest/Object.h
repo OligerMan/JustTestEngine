@@ -14,6 +14,8 @@ class Object {
 	UnitInfo unit_info;
 	ObjectType object_type;
 
+	bool deleted = false;
+
 public:
 
 	Object() {}
@@ -97,6 +99,10 @@ public:
 		col_model.changePosition(difference);
 	}
 
+	void forceChangePosition(Point difference) {
+		col_model.forceChangePosition(difference);
+	}
+
 	Point getOrigin() {
 		return col_model.getOrigin();
 	}
@@ -135,6 +141,14 @@ public:
 
 	void setAnimationType(AnimationType animation_type) {
 		vis_info.animation_type = animation_type;
+	}
+
+	void deleteObject() {
+		deleted = true;
+	}
+
+	bool isDeleted() {
+		return deleted;
 	}
 };
 

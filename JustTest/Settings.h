@@ -12,6 +12,7 @@ class Settings {
 	bool error_output_enabled = true;
 	bool redactor_mode = false;
 	bool gamepad_debug_output = true;
+	bool collision_debug_mode = false;
 
 	bool is_settings_loaded = false;
 
@@ -49,6 +50,9 @@ public:
 				}
 				if (setting == "window_width") {
 					window_width = std::stoi(value);
+				}
+				if (setting == "collision_debug") {
+					collision_debug_mode = std::stoi(value);
 				}
 				if (setting == "gamepad_debug") {
 					gamepad_debug_output = std::stoi(value);
@@ -96,6 +100,10 @@ public:
 
 	bool isGamepadDebugEnabled() {
 		return gamepad_debug_output;
+	}
+
+	bool isCollisionDebugMode() {
+		return collision_debug_mode;
 	}
 };
 

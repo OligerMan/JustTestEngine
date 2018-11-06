@@ -3,8 +3,24 @@ settings_start
 settings_end
 collision_start
 
-element test_circle
+element body
     position 0 0
-    radius 50
+    radius 25
+
+element left_hand
+    position 0 -35
+    radius 15
+
+element left_hand
+    position 0 35
+    radius 15
+
+element knife_right
+    position -30 -47
+    radius 3
+
+element knife_left
+    position 26 47
+    radius 3
 
 collision_end

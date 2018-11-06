@@ -32,6 +32,7 @@ class GUIManager {
 								last_clicked_object = gui_elements[layer][i];
 							}
 							else {
+
 								gui_event_buffer.addEvent(pressed, gui_elements[layer][i], nullptr);
 							}
 							delete cursor;
@@ -116,6 +117,20 @@ public:
 		}
 	}
 
+	void scrollRedactor(double offset) {
+		if (settings.isRedactorMode()) {
+			int scroll_bar_layer = 1;
+			if (gui_elements.size() > scroll_bar_layer) {
+				for (int i = 0; i < gui_elements[scroll_bar_layer].size(); i++) {
+					if (gui_elements[scroll_bar_layer][0]->getPosition().y < -settings.getWindowHeight() / 2 + 200 && 
+						gui_elements[scroll_bar_layer][gui_elements[scroll_bar_layer].size() - 1]->getPosition().y > settings.getWindowHeight() / 2 - 200) {
+						gui_elements[scroll_bar_layer][i]->forceChangePosition(Point(0, offset));
+					}
+				}
+			}
+		}
+	}
+
 	bool loadFromFile(std::string path) {
 		gui_parser(path, &gui_elements);
 	}
@@ -125,14 +140,14 @@ public:
 		processEventBuffer();
 		if (settings.isRedactorMode() && !output && click != Point(10000000, 100000000)) {
 			if (selected_object != nullptr) {
-				Object * output = new Object(*selected_object);
-				output->setPosition(click + viewport_pos);
-				external_event_buffer.addEvent(create_new, output, nullptr);
+				Object * output_obj = new Object(*selected_object);
+				output_obj->setPosition(click + viewport_pos);
+				external_event_buffer.addEvent(create_new, output_obj, nullptr);
 				delete selected_object;
 				selected_object = nullptr;
+				output = true;
 			}
 
-			output = true;
 		}
 
 		return output;

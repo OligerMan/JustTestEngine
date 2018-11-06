@@ -9,7 +9,7 @@ enum XBOXGamepadButtons {
 	A,B,X,Y,LB,RB,BACK,START,LSTICK,RSTICK
 };
 
-void gameCycle() {
+void gameCycle(std::string map_name) {
 	collision_type_init();
 	object_type_init();
 	event_type_init();
@@ -30,7 +30,7 @@ void gameCycle() {
 
 	VisualController visual_ctrl;
 	GUIVisualController gui_visual_ctrl;
-	Map game_map1("maps/test_map.map");
+	Map game_map1("maps/" + map_name + ".map");
 
 	if (settings.isSpriteDebugOutputEnabled() && settings.isRedactorMode()) {
 		std::cout << "Redactor mode objects upload" << std::endl;
@@ -59,23 +59,34 @@ void gameCycle() {
 				window.close();
 		}
 
-		Event gui_event = gui_manager.getEvent();
-		if (gui_event.getFirstObject() != nullptr) {
-			switch (gui_event.getEventType()) {
-			case create_new:
-				game_map1.addObject(gui_event.getFirstObject(), 0);
-			default:
-				break;
-			}
-		}
+		
 
 		Point viewport_pos = Point(view1.getCenter().x, view1.getCenter().y);
 
 		// game cycle
+
 		if (is_game_cycle) {
 			window.clear(sf::Color::Black);
 			is_game_cycle = visual_ctrl.processFrame(&window, game_map1.getObjectsBuffer());
 			is_game_cycle = gui_visual_ctrl.processFrame(&window, gui_manager.getObjectsBuffer(), viewport_pos) && is_game_cycle;
+			
+			if (settings.isCollisionDebugMode()) {
+
+				for (int x = 0; x < window.getSize().x; x+=3) {
+					for (int y = 0; y < window.getSize().y; y+=3) {
+						if (game_map1.isClickable(Point(x, y) + viewport_pos - Point(settings.getWindowWidth() / 2, settings.getWindowHeight() / 2))) {
+							sf::Vertex line[] =
+							{
+								sf::Vertex(sf::Vector2f(x + viewport_pos.x - settings.getWindowWidth() / 2, y + viewport_pos.y - settings.getWindowHeight() / 2)),
+								sf::Vertex(sf::Vector2f(x + viewport_pos.x - settings.getWindowWidth() / 2, y + viewport_pos.y + 1 - settings.getWindowHeight() / 2))
+							};
+							line->color = sf::Color::Red;
+
+							window.draw(line, 2, sf::Lines);
+						}
+					}
+				}
+			}
 			
 		}
 		// input handling
@@ -98,7 +109,7 @@ void gameCycle() {
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 			if (!gui_manager.processFrame(cursor_pos, viewport_pos)) {
-				game_map1.processFrame(cursor_pos);
+				game_map1.processFrame(cursor_pos + viewport_pos);
 			}
 		}
 		else {
@@ -107,72 +118,98 @@ void gameCycle() {
 			}
 		}
 
+		Event gui_event = gui_manager.getEvent();
+		if (gui_event.getFirstObject() != nullptr) {
+			switch (gui_event.getEventType()) {
+			case create_new:
+				game_map1.addObject(gui_event.getFirstObject(), 0);
+			default:
+				break;
+			}
+		}
+
 		double hero_speed = consts.getDefualtHeroSpeed();
 		Object * hero_object = game_map1.getHero();
-		hero_object->setSpeed(Point(0, 0));
-		hero_object->setAnimationType(hold_anim);
-		hero_object->setAngle(0);
+		if (hero_object != nullptr) {
+			if (hero_object != nullptr) {
+				hero_object->setSpeed(Point(0, 0));
+				hero_object->setAnimationType(hold_anim);
+			}
 
+		}
+		
 		
 		if (settings.isRedactorMode()) {
 			const double viewport_speed = 0.1;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 				view1.move(0, -viewport_speed);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 				view1.move(-viewport_speed, 0);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 				view1.move(0, viewport_speed);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 				view1.move(viewport_speed, 0);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
-				saveMap("maps/test_map.map", game_map1.getObjectsBuffer());
+			double scroll_bar_speed = 0.1;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+				gui_manager.scrollRedactor(-scroll_bar_speed);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+				gui_manager.scrollRedactor(scroll_bar_speed);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
+				saveMap("maps/" + map_name + ".map", game_map1.getObjectsBuffer());
 				return;
 			}
 		}
 		else {
-			if (sf::Joystick::isConnected(0)) {         // gamepad input
-				hero_object->setSpeed(Point(
-					sf::Joystick::getAxisPosition(0, sf::Joystick::X),
-					sf::Joystick::getAxisPosition(0, sf::Joystick::Y)));
-				if (abs(hero_object->getSpeed().x) < 1 && abs(hero_object->getSpeed().y) < 1) {
-					hero_object->setSpeed(Point());
-				}
-				else {
-					hero_object->setAnimationType(move_anim);
-				}
+			if (hero_object != nullptr) {
+				if (sf::Joystick::isConnected(0)) {         // gamepad input
 
-				int buttons_count = sf::Joystick::getButtonCount(0);
-				for (int i = 0; i < buttons_count; i++) {
-					if (sf::Joystick::isButtonPressed(0, i)) {
-						if (settings.isGamepadDebugEnabled()) {
-							std::cout << "Gamepad button number " << i << " is pressed" << std::endl;
+					hero_object->setSpeed(Point(
+						sf::Joystick::getAxisPosition(0, sf::Joystick::X),
+						sf::Joystick::getAxisPosition(0, sf::Joystick::Y)));
+					if (abs(hero_object->getSpeed().x) < 1 && abs(hero_object->getSpeed().y) < 1) {
+						hero_object->setSpeed(Point());
+					}
+					else {
+						hero_object->setAnimationType(move_anim);
+					}
+
+					int buttons_count = sf::Joystick::getButtonCount(0);
+					for (int i = 0; i < buttons_count; i++) {
+						if (sf::Joystick::isButtonPressed(0, i)) {
+							if (settings.isGamepadDebugEnabled()) {
+								std::cout << "Gamepad button number " << i << " is pressed" << std::endl;
+							}
 						}
 					}
 				}
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-				hero_object->changeSpeed(Point(0, -1));
-				hero_object->setAnimationType(move_anim);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-				hero_object->changeSpeed(Point(-1, 0));
-				hero_object->setAnimationType(move_anim);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-				hero_object->changeSpeed(Point(0, 1));
-				hero_object->setAnimationType(move_anim);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-				hero_object->changeSpeed(Point(1, 0));
-				hero_object->setAnimationType(move_anim);
-			}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+					hero_object->changeSpeed(Point(0, -1));
+					hero_object->setAnimationType(move_anim);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+					hero_object->changeSpeed(Point(-1, 0));
+					hero_object->setAnimationType(move_anim);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+					hero_object->changeSpeed(Point(0, 1));
+					hero_object->setAnimationType(move_anim);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+					hero_object->changeSpeed(Point(1, 0));
+					hero_object->setAnimationType(move_anim);
+				}
 
-			hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
-			hero_object->setSpeed(hero_object->getSpeed().getNormal() * hero_speed);
+				if (hero_object->getSpeed().getLength() != 0) {
+					hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
+					hero_object->setSpeed(hero_object->getSpeed().getNormal() * hero_speed);
+				}
+			}
 		}
 		
 
@@ -181,10 +218,12 @@ void gameCycle() {
 
 		}
 		else {
-			const double view_speed_coef = 0.006;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
-			Point hero_position = hero_object->getPosition();
-			Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef;
-			view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
+			if (hero_object != nullptr) {
+				const double view_speed_coef = 0.006;    // must be from 0 to 1, where 0 for static camera and 1 for camera istantly over hero
+				Point hero_position = hero_object->getPosition();
+				Point diff = (hero_position - Point(view1.getCenter())) * view_speed_coef;
+				view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
+			}
 		}
 		window.setView(view1);
 
@@ -212,7 +251,9 @@ int main() {
 	else {
 		settings.setRedactorMode(true);
 	}
-	gameCycle();
+	std::cout << "Enter map name" << std::endl;
+	std::cin >> input; // path to game map
+	gameCycle(input);
 
 	return 0;
 }

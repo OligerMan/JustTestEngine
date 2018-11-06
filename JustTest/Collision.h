@@ -70,16 +70,16 @@ public:
 		}
 		for (int i = 1; i < col_model.size(); i++) {
 			if (col_model[i].center.x - col_model[i].collision_radius < left) {
-				left = col_model[i].center.x - col_model[0].collision_radius;
+				left = col_model[i].center.x - col_model[i].collision_radius;
 			}
 			if (col_model[i].center.x + col_model[i].collision_radius > right) {
-				right = col_model[i].center.x + col_model[0].collision_radius;
+				right = col_model[i].center.x + col_model[i].collision_radius;
 			}
-			if (col_model[i].center.x - col_model[i].collision_radius < top) {
-				top = col_model[i].center.x - col_model[0].collision_radius;
+			if (col_model[i].center.y - col_model[i].collision_radius < top) {
+				top = col_model[i].center.y - col_model[i].collision_radius;
 			}
-			if (col_model[i].center.x + col_model[i].collision_radius > bottom) {
-				bottom = col_model[i].center.x + col_model[0].collision_radius;
+			if (col_model[i].center.y + col_model[i].collision_radius > bottom) {
+				bottom = col_model[i].center.y + col_model[i].collision_radius;
 			}
 		}
 		origin = Point((right - left) / 2.0, (bottom - top) / 2.0);
@@ -97,6 +97,10 @@ public:
 		if(!is_static){
 			position += difference;
 		}
+	}
+
+	void forceChangePosition(Point difference) {
+		position += difference;
 	}
 	
 	double getAngle() {
