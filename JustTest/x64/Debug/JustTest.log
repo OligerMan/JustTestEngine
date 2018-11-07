@@ -21,15 +21,14 @@ e:\projects\justtest\justtestengine\justtest\guiparser.h(85): warning C4800: 'st
               _Ty=Object *
           ]
 e:\projects\justtest\justtestengine\justtest\source.cpp(29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(74): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\source.cpp(75): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\source.cpp(79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(76): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\source.cpp(80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(144): warning C4305: 'argument': truncation from 'const double' to 'float'
-e:\projects\justtest\justtestengine\justtest\source.cpp(147): warning C4305: 'argument': truncation from 'const double' to 'float'
-e:\projects\justtest\justtestengine\justtest\source.cpp(150): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(153): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(224): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  LINK : E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.exe not found or not built by the last incremental link; performing full link
+e:\projects\justtest\justtestengine\justtest\source.cpp(81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(145): warning C4305: 'argument': truncation from 'const double' to 'float'
+e:\projects\justtest\justtestengine\justtest\source.cpp(148): warning C4305: 'argument': truncation from 'const double' to 'float'
+e:\projects\justtest\justtestengine\justtest\source.cpp(151): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(154): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(225): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.exe
   JustTest.vcxproj -> E:\Projects\JustTest\JustTestEngine\x64\Debug\JustTest.pdb (Partial PDB)
