@@ -13,6 +13,7 @@ class Settings {
 	bool redactor_mode = false;
 	bool gamepad_debug_output = true;
 	bool collision_debug_mode = false;
+	bool navigation_debug_mode = false;
 
 	bool is_settings_loaded = false;
 
@@ -56,6 +57,9 @@ public:
 				}
 				if (setting == "gamepad_debug") {
 					gamepad_debug_output = std::stoi(value);
+				}
+				if (setting == "navigation_debug") {
+					navigation_debug_mode = std::stoi(value);
 				}
 				if (setting == "config_end") {
 					is_settings_loaded = true;
@@ -104,6 +108,10 @@ public:
 
 	bool isCollisionDebugMode() {
 		return collision_debug_mode;
+	}
+
+	bool isNavigationGridMode() {
+		return navigation_debug_mode;
 	}
 };
 

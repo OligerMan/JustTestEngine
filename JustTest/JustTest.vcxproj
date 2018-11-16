@@ -110,6 +110,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AStarAlgorithm.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionParser.h" />
     <ClInclude Include="Event.h" />

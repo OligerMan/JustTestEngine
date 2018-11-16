@@ -1,6 +1,7 @@
 #include "VisualController.h"
 #include "GUIVisualController.h"
 #include "GUIManager.h"
+#include "Timer.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -15,6 +16,7 @@ void gameCycle(std::string map_name) {
 	event_type_init();
 	sprite_type_init();
 	animation_type_init();
+	faction_type_init();
 
 	std::chrono::time_point<std::chrono::system_clock> frame_start = std::chrono::system_clock::now();
 	std::chrono::time_point<std::chrono::system_clock> frame_end = std::chrono::system_clock::now();
@@ -59,7 +61,7 @@ void gameCycle(std::string map_name) {
 				window.close();
 		}
 
-		
+		timer.processTime();
 
 		Point viewport_pos = Point(view1.getCenter().x, view1.getCenter().y);
 
@@ -81,6 +83,27 @@ void gameCycle(std::string map_name) {
 								sf::Vertex(sf::Vector2f(x + viewport_pos.x - settings.getWindowWidth() / 2, y + viewport_pos.y + 1 - settings.getWindowHeight() / 2))
 							};
 							line->color = sf::Color::Red;
+
+							window.draw(line, 2, sf::Lines);
+						}
+					}
+				}
+			}
+
+			if (settings.isNavigationGridMode()) {
+				Point grid_offset = game_map1.getNavigationGridOffset();
+				double grid_size = game_map1.getNavigationGridSize();
+
+				for (int x = 0; x < window.getSize().x; x += 3) {
+					for (int y = 0; y < window.getSize().y; y += 3) {
+						Point grid_point = (Point(x, y) + viewport_pos - Point(settings.getWindowWidth() / 2, settings.getWindowHeight() / 2));
+						if (game_map1.getNavigationGridElem((grid_point.x - grid_offset.x) / grid_size, (grid_point.y - grid_offset.y) / grid_size)) {
+							sf::Vertex line[] =
+							{
+								sf::Vertex(sf::Vector2f(grid_point.x, grid_point.y)),
+								sf::Vertex(sf::Vector2f(grid_point.x, grid_point.y + 1))
+							};
+							line->color = sf::Color::Green;
 
 							window.draw(line, 2, sf::Lines);
 						}
@@ -228,13 +251,6 @@ void gameCycle(std::string map_name) {
 		window.setView(view1);
 
 		window.display();
-
-		/*frame_end = std::chrono::system_clock::now();
-		int frame_duration = std::chrono::duration_cast<std::chrono::milliseconds>(frame_end - frame_start).count();
-		if (frame_duration > 5) {
-			std::cout << "Perfomance warning" << std::endl;
-		}*/
-		//Sleep(std::max(0, frame_latency - frame_duration));
 	}
 }
 

@@ -13,6 +13,7 @@
 class CollisionModel {
 	Point position;
 	Point origin;
+	Point square_border;
 	double angle = 0;
 
 	Point speed;
@@ -26,6 +27,10 @@ public:
 
 	CollisionModel(std::string object_path) {
 		col_model = collisionParse(object_path, is_static);
+	}
+
+	bool isStatic() {
+		return is_static;
 	}
 
 	int getModelSize() {
@@ -82,6 +87,7 @@ public:
 				bottom = col_model[i].center.y + col_model[i].collision_radius;
 			}
 		}
+		square_border = Point(right - left, bottom - top);
 		origin = Point((right - left) / 2.0, (bottom - top) / 2.0);
 	}
 
@@ -125,6 +131,10 @@ public:
 
 	void changeSpeed(Point difference) {
 		speed += difference;
+	}
+
+	Point getSquareBorder(){
+		return square_border;
 	}
 };
 

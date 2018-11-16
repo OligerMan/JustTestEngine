@@ -4,7 +4,7 @@ class Constants {
 
 	const double speed_damage_threshold = 100;
 	const double speed_damage_coef = 1;
-	const double default_hero_speed = 0.1;
+	const double default_hero_speed = 0.3;
 
 public:
 

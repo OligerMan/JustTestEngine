@@ -4,6 +4,7 @@
 #include "ObjectTypes.h"
 #include "VisualInfo.h"
 #include "UnitInfo.h"
+#include "Timer.h"
 
 class Object {
 
@@ -149,6 +150,10 @@ public:
 
 	bool isDeleted() {
 		return deleted;
+	}
+
+	Point getSquareBorder() {
+		return col_model.getSquareBorder();
 	}
 };
 

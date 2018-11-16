@@ -4,6 +4,8 @@
 #include "EventBuffer.h"
 #include "MapParser.h"
 #include "GameConstants.h"
+#include "Timer.h"
+#include "AStarAlgorithm.h"
 
 void fixCollision(Object * obj1, Object * obj2) { 
 	const double min_speed = 0.1;
@@ -60,6 +62,12 @@ class Map {
 	std::vector<std::vector<Object *>> objects;                // vector of objects layers, it is defining order for render and reducing amount of collisions
 	std::vector<std::string> animation_type;
 
+	int main_layer = 1;
+
+	std::vector<std::vector<int>> navigation_grid;
+	double grid_size = 10;
+	Point grid_offset;
+
 	Object * hero = nullptr;
 
 	EventBuffer event_buffer;
@@ -67,6 +75,73 @@ class Map {
 	Object * last_clicked_object = nullptr;
 
 	//////////////////////////////////////////////
+
+	void createNavigationGrid() {
+		Point left_up(1e9, 1e9), right_down(-1e9, -1e9);
+
+		for (int layer = 0; layer < objects.size(); layer++) {
+			for (int i = 0; i < objects[layer].size(); i++) {
+				Object * object = objects[layer][i];
+				//if (object->getCollisionModel()->isStatic()) {
+					if (-object->getOrigin().x + object->getPosition().x < left_up.x) {
+						left_up.x = -object->getOrigin().x + object->getPosition().x;
+					}
+					if (-object->getOrigin().y + object->getPosition().y < left_up.y) {
+						left_up.y = -object->getOrigin().y + object->getPosition().y;
+					}
+					if (-object->getOrigin().x + object->getSquareBorder().x + object->getPosition().x > right_down.x) {
+						right_down.x = -object->getOrigin().x + object->getSquareBorder().x + object->getPosition().x;
+					}
+					if (-object->getOrigin().y + object->getSquareBorder().y + object->getPosition().y > right_down.y) {
+						right_down.y = -object->getOrigin().y + object->getSquareBorder().y + object->getPosition().y;
+					}
+				//}
+			}
+		}
+
+		grid_offset = left_up;
+
+		// init empty navigation grid
+		navigation_grid.resize((right_down.x - left_up.x) / grid_size + 1);
+		if (!navigation_grid.empty()) {
+			for (int i = 0; i < navigation_grid.size(); i++) {
+				navigation_grid[i].resize((right_down.y - left_up.y) / grid_size + 1);
+			}
+			for (int i = 0; i < navigation_grid.size(); i++) {
+				navigation_grid[i][0] = 1;
+				navigation_grid[i][(right_down.y - left_up.y) / grid_size] = 1;
+			}
+			for (int i = 0; i < int((right_down.y - left_up.y) / grid_size + 1); i++) {
+				navigation_grid[0][i] = 1;
+				navigation_grid[navigation_grid.size() - 1][i] = 1;
+			}
+		}
+		// grid initialisation end
+
+		for (int layer = 0; layer < objects.size(); layer++) {
+			for (int i = 0; i < objects[layer].size(); i++) {
+				Object * object = objects[layer][i];
+
+				if (object->getCollisionModel()->isStatic()) {
+					double grid_width = object->getCollisionModel()->getSquareBorder().x / grid_size + 1;
+					double grid_height = object->getCollisionModel()->getSquareBorder().y / grid_size + 1;
+					
+					Point start_object_grid = object->getPosition() - grid_offset - object->getOrigin();
+					for (double i = 0; i < grid_width; i++) {
+						for (double j = 0; j < grid_height; j++) {
+							Point cur_point = start_object_grid + Point(i * grid_size, j * grid_size);
+							Object * grid_elem = new Object();
+							grid_elem->getCollisionModel()->addCircle(Point(), grid_size * ((1 + sqrt(2)) / 2));
+							grid_elem->setPosition(cur_point + grid_offset);
+							if (checkObjectCollision(grid_elem, object) && navigation_grid[cur_point.x / grid_size][cur_point.y / grid_size] != 1) {
+								navigation_grid[cur_point.x / grid_size][cur_point.y / grid_size] = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	void processCollisionFrame(){
 		for (int cnt = 0; cnt < objects.size(); cnt++) {
@@ -102,7 +177,7 @@ class Map {
 			}
 			Object
 				* obj1 = buffer_elem.getFirstObject(),
-				*obj2 = buffer_elem.getSecondObject();
+				* obj2 = buffer_elem.getSecondObject();
 			double thresh = consts.getSpeedDamageThreshold();
 			double coef = consts.getSpeedDamageCoef();
 
@@ -117,9 +192,6 @@ class Map {
 			case clicked:
 				if (settings.isRedactorMode()) {
 					buffer_elem.getFirstObject()->deleteObject();
-				}
-				else {
-					buffer_elem.getFirstObject()->changeAngle(10);
 				}
 				break;
 			};
@@ -159,7 +231,7 @@ class Map {
 	void processObjectSpeed() {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
-				objects[layer][i]->changePosition(objects[layer][i]->getSpeed());
+				objects[layer][i]->changePosition(objects[layer][i]->getSpeed() * timer.getTimeDelay() / 1000);
 			}
 		}
 	}
@@ -176,6 +248,7 @@ public:
 				}
 			}
 		}
+		createNavigationGrid();
 	}
 
 	bool isClickable(Point click) {
@@ -219,4 +292,20 @@ public:
 		return hero;
 	}
 
+	Point getNavigationGridOffset() {
+		return grid_offset;
+	}
+
+	int getNavigationGridElem(int x, int y) {
+		if (!navigation_grid.empty() && x >= 0 && y >= 0 && x < navigation_grid.size() && y < navigation_grid[0].size()) {
+			return navigation_grid[x][y];
+		}
+		else {
+			return 0;
+		}
+	}
+
+	double getNavigationGridSize() {
+		return grid_size;
+	}
 };

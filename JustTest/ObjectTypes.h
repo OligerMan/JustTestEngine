@@ -33,7 +33,6 @@ int is_collision_type_exists(std::string example) {
 	return -1;
 }
 
-
 enum ObjectType {
 	null,
 	stone,

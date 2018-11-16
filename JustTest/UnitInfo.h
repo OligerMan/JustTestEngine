@@ -1,6 +1,38 @@
 #pragma once
 #include <algorithm>
 
+enum FactionList {
+	null_faction,
+	hero_faction,
+	friendly_faction,
+	neutral_faction,
+	agressive_faction,
+
+	FACTION_COUNT
+};
+
+std::vector<std::string> faction_type;
+
+
+void faction_type_init() {
+	faction_type.resize(FACTION_COUNT);
+
+	faction_type[null_faction] = "null";
+
+	faction_type[friendly_faction] = "friendly";
+	faction_type[neutral_faction] = "neutral";
+	faction_type[agressive_faction] = "agressive";
+}
+
+int is_faction_type_exists(std::string example) {
+	for (int i = 0; i < FACTION_COUNT; i++) {
+		if (faction_type[i] == example) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 class UnitInfo {
 	double EPS = 0.00001;
 
@@ -13,6 +45,11 @@ class UnitInfo {
 	double max_endur = 0;
 	double endur = 0;     // endurance
 	bool inf_endur = true;
+
+	double default_speed = 0.1;
+	double speed_coef = 1;
+
+	int faction = 0;              // faction index: 0 for non-unit objects, 1 for hero and his allies, from 2 to infinity(2^31) for other factions
 
 	bool is_effects_allowed = true;
 
@@ -83,6 +120,14 @@ public:
 
 	bool isDead() {
 		return (!inf_hp && (hp < 0));
+	}
+
+	int getFaction() {
+		return faction;
+	}
+
+	void setFaction(int new_faction) {
+		faction = new_faction;
 	}
 
 };

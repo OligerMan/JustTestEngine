@@ -9,13 +9,17 @@ class Timer {
 	int current_frame = 0;
 	bool is_frame_new = true;
 
-	int frame_duration;
 
 public:
 
-	Timer(int frame_duration) : frame_duration(frame_duration) {}
 
 	void processTime() {
-
+		time2 = time1;
+		time1 = std::chrono::high_resolution_clock::now();
 	}
-};
+
+	int getTimeDelay() {
+		return std::chrono::duration_cast<std::chrono::microseconds>(time1 - time2).count();
+	}
+
+}timer;
