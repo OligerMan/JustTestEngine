@@ -15,6 +15,7 @@ object yoba_hero
     sprite_type hero
     animation_type hold
     frame_duration 100
+    faction hero
 
 object circle_stone
     layer 0
@@ -26,6 +27,6 @@ object circle_stone
     sprite_type stone
     animation_type hold
     frame_duration 1
-
+    faction null
 
 object_end

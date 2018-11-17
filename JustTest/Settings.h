@@ -113,6 +113,10 @@ public:
 	bool isNavigationGridMode() {
 		return navigation_debug_mode;
 	}
+
+	void switchNavigationGridMode() {
+		navigation_debug_mode = navigation_debug_mode ^ true;
+	}
 };
 
 Settings settings;

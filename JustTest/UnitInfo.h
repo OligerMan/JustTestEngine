@@ -19,6 +19,7 @@ void faction_type_init() {
 
 	faction_type[null_faction] = "null";
 
+	faction_type[hero_faction] = "hero";
 	faction_type[friendly_faction] = "friendly";
 	faction_type[neutral_faction] = "neutral";
 	faction_type[agressive_faction] = "agressive";

@@ -62,9 +62,10 @@ class Map {
 	std::vector<std::vector<Object *>> objects;                // vector of objects layers, it is defining order for render and reducing amount of collisions
 	std::vector<std::string> animation_type;
 
-	int main_layer = 1;
+	int main_layer = 0;
 
 	std::vector<std::vector<int>> navigation_grid;
+	std::vector<std::vector<Point>> navigation_paths;
 	double grid_size = 10;
 	Point grid_offset;
 
@@ -99,19 +100,19 @@ class Map {
 			}
 		}
 
-		grid_offset = left_up;
+		grid_offset = left_up * 1.5;
 
 		// init empty navigation grid
-		navigation_grid.resize((right_down.x - left_up.x) / grid_size + 1);
+		navigation_grid.resize((right_down.x - left_up.x) / grid_size * 1.5 + 1);
 		if (!navigation_grid.empty()) {
 			for (int i = 0; i < navigation_grid.size(); i++) {
-				navigation_grid[i].resize((right_down.y - left_up.y) / grid_size + 1);
+				navigation_grid[i].resize((right_down.y - left_up.y) / grid_size * 1.5 + 1);
 			}
 			for (int i = 0; i < navigation_grid.size(); i++) {
 				navigation_grid[i][0] = 1;
-				navigation_grid[i][(right_down.y - left_up.y) / grid_size] = 1;
+				navigation_grid[i][(right_down.y - left_up.y) / grid_size * 1.5] = 1;
 			}
-			for (int i = 0; i < int((right_down.y - left_up.y) / grid_size + 1); i++) {
+			for (int i = 0; i < int((right_down.y - left_up.y) / grid_size * 1.5 + 1); i++) {
 				navigation_grid[0][i] = 1;
 				navigation_grid[navigation_grid.size() - 1][i] = 1;
 			}
@@ -123,15 +124,15 @@ class Map {
 				Object * object = objects[layer][i];
 
 				if (object->getCollisionModel()->isStatic()) {
-					double grid_width = object->getCollisionModel()->getSquareBorder().x / grid_size + 1;
-					double grid_height = object->getCollisionModel()->getSquareBorder().y / grid_size + 1;
+					double grid_width = object->getCollisionModel()->getSquareBorder().x / grid_size * 1.5 + 1;
+					double grid_height = object->getCollisionModel()->getSquareBorder().y / grid_size * 1.5 + 1;
 					
-					Point start_object_grid = object->getPosition() - grid_offset - object->getOrigin();
+					Point start_object_grid = object->getPosition() - grid_offset - (object->getOrigin() * 1.5);
 					for (double i = 0; i < grid_width; i++) {
 						for (double j = 0; j < grid_height; j++) {
 							Point cur_point = start_object_grid + Point(i * grid_size, j * grid_size);
 							Object * grid_elem = new Object();
-							grid_elem->getCollisionModel()->addCircle(Point(), grid_size * ((1 + sqrt(2)) / 2));
+							grid_elem->getCollisionModel()->addCircle(Point(), grid_size * 3);
 							grid_elem->setPosition(cur_point + grid_offset);
 							if (checkObjectCollision(grid_elem, object) && navigation_grid[cur_point.x / grid_size][cur_point.y / grid_size] != 1) {
 								navigation_grid[cur_point.x / grid_size][cur_point.y / grid_size] = 1;
@@ -151,6 +152,67 @@ class Map {
 						if (checkObjectCollision(objects[cnt][i], objects[cnt][j])) {
 							event_buffer.addEvent(objects[cnt][i], objects[cnt][j]);
 							fixCollision(objects[cnt][i], objects[cnt][j]);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	Point convertToNavigation(Point input) {
+		Point output = (input - grid_offset) / grid_size;
+		output.x = int(output.x);
+		output.y = int(output.y);
+
+		return output;
+	}
+
+	Point convertFromNavigation(Point input) {
+		return input * grid_size + grid_offset;
+	}
+
+	std::vector<Point> findPath(Object * object1, Object * object2) {
+		Point
+			point1 = convertToNavigation(object1->getPosition()),
+			point2 = convertToNavigation(object2->getPosition());
+
+		std::vector<Point> output = getAStarPath(navigation_grid, point1, point2);
+		for (int i = 0; i < output.size(); i++) {
+			output[i] = convertFromNavigation(output[i]);
+		}
+		if (!output.empty()) {
+			//output[0] = object2->getPosition();
+			//output[output.size() - 1] = object1->getPosition();
+		}
+
+		return output;
+	}
+
+	void processUnitAI() {
+		navigation_paths.clear();
+		for (int i = 0; i < objects[main_layer].size(); i++) {
+			Object * object1 = objects[main_layer][i];
+			int faction1 = object1->getUnitInfo()->getFaction();
+
+			if (faction1 != FactionList::null_faction) {
+				for (int j = 0; j < objects[main_layer].size(); j++) {
+					if (i != j) {
+						Object * object2 = objects[main_layer][j];
+						int faction2 = object2->getUnitInfo()->getFaction();
+
+						if (faction1 != faction2 && faction1 != hero_faction && faction1 != null_faction && faction2 != null_faction) {
+							std::vector<Point> path = findPath(object2, object1);
+							if (!path.empty()) {
+								if (settings.isNavigationGridMode()) {
+									navigation_paths.push_back(path);
+								}
+								object1->setSpeed((path[2] - path[0]).getNormal() * consts.getDefaultHeroSpeed() * 0.9);
+								object1->setAnimationType(move_anim);
+								object1->setAngle(-atan2(-object1->getSpeed().y, object1->getSpeed().x) * 180 / PI);
+							}
+							else {
+								object1->setAnimationType(hold_anim);
+							}
 						}
 					}
 				}
@@ -231,7 +293,7 @@ class Map {
 	void processObjectSpeed() {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
-				objects[layer][i]->changePosition(objects[layer][i]->getSpeed() * timer.getTimeDelay() / 1000);
+				objects[layer][i]->changePosition(objects[layer][i]->getSpeed()/* * timer.getTimeDelay() / 1000*/);
 			}
 		}
 	}
@@ -280,8 +342,11 @@ public:
 		std::cout << "New object created" << std::endl;
 	}
 
-	void processFrame(Point click) {
+	void processFrame(Point click, bool recount_navigation) {
 		processClick(click);
+		if (recount_navigation && !settings.isRedactorMode()) {
+			processUnitAI();
+		}
 		processObjectSpeed();
 		processCollisionFrame();
 		processEventBuffer();
@@ -303,6 +368,10 @@ public:
 		else {
 			return 0;
 		}
+	}
+
+	std::vector<std::vector<Point>> getNavigationPaths() {
+		return navigation_paths;
 	}
 
 	double getNavigationGridSize() {

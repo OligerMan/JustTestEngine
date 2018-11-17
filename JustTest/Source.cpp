@@ -48,11 +48,13 @@ void gameCycle(std::string map_name) {
 	window.setView(view1);
 
 	bool is_game_cycle = true;
+	int frame_num = 0;
 
 
 	while (window.isOpen())
 	{
 		//frame_start = std::chrono::system_clock::now();
+		frame_num++;
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -91,6 +93,7 @@ void gameCycle(std::string map_name) {
 			}
 
 			if (settings.isNavigationGridMode()) {
+				// render navigation grid
 				Point grid_offset = game_map1.getNavigationGridOffset();
 				double grid_size = game_map1.getNavigationGridSize();
 
@@ -107,6 +110,21 @@ void gameCycle(std::string map_name) {
 
 							window.draw(line, 2, sf::Lines);
 						}
+					}
+				}
+
+				// render navigation paths
+				std::vector<std::vector<Point>> navigation_paths = game_map1.getNavigationPaths();
+				for (int path_num = 0; path_num < navigation_paths.size(); path_num++) {
+					for (int i = 1; i < navigation_paths[path_num].size(); i++) {
+						sf::Vertex line[] =
+						{
+							sf::Vertex(sf::Vector2f(navigation_paths[path_num][i - 1].x/* + viewport_pos.x - settings.getWindowWidth() / 2*/, navigation_paths[path_num][i - 1].y/* + viewport_pos.y - settings.getWindowHeight() / 2*/)),
+							sf::Vertex(sf::Vector2f(navigation_paths[path_num][i].x/* + viewport_pos.x - settings.getWindowWidth() / 2*/, navigation_paths[path_num][i].y/* + viewport_pos.y - settings.getWindowHeight() / 2*/))
+						};
+						line->color = sf::Color::Blue;
+
+						window.draw(line, 2, sf::Lines);
 					}
 				}
 			}
@@ -128,16 +146,16 @@ void gameCycle(std::string map_name) {
 				delete object;
 			}
 		}
-
+		
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 			if (!gui_manager.processFrame(cursor_pos, viewport_pos)) {
-				game_map1.processFrame(cursor_pos + viewport_pos);
+				game_map1.processFrame(cursor_pos + viewport_pos, frame_num % 100 == 1);
 			}
 		}
 		else {
 			if (!gui_manager.processFrame(Point(10000000, 100000000), viewport_pos)) {
-				game_map1.processFrame(Point(10000000, 100000000));
+				game_map1.processFrame(Point(10000000, 100000000), frame_num % 100 == 1);
 			}
 		}
 
@@ -151,7 +169,7 @@ void gameCycle(std::string map_name) {
 			}
 		}
 
-		double hero_speed = consts.getDefualtHeroSpeed();
+		double hero_speed = consts.getDefaultHeroSpeed();
 		Object * hero_object = game_map1.getHero();
 		if (hero_object != nullptr) {
 			if (hero_object != nullptr) {
@@ -226,6 +244,11 @@ void gameCycle(std::string map_name) {
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 					hero_object->changeSpeed(Point(1, 0));
 					hero_object->setAnimationType(move_anim);
+				}
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+					settings.switchNavigationGridMode();
+					Sleep(100);
 				}
 
 				if (hero_object->getSpeed().getLength() != 0) {

@@ -33,6 +33,7 @@ settings_start
 			- sprite_type <one of strings, defined in VisualInfo.h>
 			- animation_type <one of strings, defined in VisualInfo.h>
 			- frame_duration <duration of frames in animation>
+			- faction <one of strings, defined in UnitInfo.h>
  object_end
  -- Objects block end
 */
@@ -96,7 +97,8 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 					collision_type,
 					sprite_type,
 					animation_type,
-					frame_duration_string;
+					frame_duration_string,
+					faction_string;
 
 				Object * object = new Object();
 
@@ -197,7 +199,18 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 				else {
 					if (settings.isErrorOutputEnabled()) {
 						std::cout << "Objects block is crashed in map " << path << std::endl;
-						std::cout << " -- animation_type block is missing in object " << object_name << std::endl;
+						std::cout << " -- frame_duration block is missing in object " << object_name << std::endl;
+						continue;
+					}
+				}
+				map_file >> input;
+				if (input == "faction") {
+					map_file >> faction_string;
+				}
+				else {
+					if (settings.isErrorOutputEnabled()) {
+						std::cout << "Objects block is crashed in map " << path << std::endl;
+						std::cout << " -- faction block is missing in object " << object_name << std::endl;
 						continue;
 					}
 				}
@@ -207,7 +220,8 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 					collision_type_index = is_collision_type_exists(collision_type),
 					sprite_type_index = is_sprite_type_exists(sprite_type),
 					animation_type_index = is_animation_type_exists(animation_type),
-					frame_duration = std::stoi(frame_duration_string);
+					frame_duration = std::stoi(frame_duration_string),
+					faction = is_faction_type_exists(faction_string);
 
 				if (object_type_index == -1 || collision_type_index == -1 || sprite_type_index == -1 || animation_type_index == -1) {
 					if (settings.isErrorOutputEnabled()) {
@@ -227,6 +241,7 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 						frame_duration
 					)
 				);
+				object->getUnitInfo()->setFaction(faction);
 
 				if (origin_mode == "auto") {
 					object->setAutoOrigin();
@@ -274,6 +289,7 @@ void saveMap(std::string path, std::vector<std::vector<Object *>> * objects) {
 			new_map << "        sprite_type " << sprite_type[object->getObjectSpriteType()] << std::endl;
 			new_map << "        animation_type " << animation_type[object->getObjectAnimationType()] << std::endl;
 			new_map << "        frame_duration " << object->getFrameDuration() << std::endl;
+			new_map << "        faction " << faction_type[object->getUnitInfo()->getFaction()] << std::endl;
 			new_map << std::endl;
 		}
 	}

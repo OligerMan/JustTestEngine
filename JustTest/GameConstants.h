@@ -16,7 +16,7 @@ public:
 		return speed_damage_coef;
 	}
 	
-	const double getDefualtHeroSpeed() {
+	const double getDefaultHeroSpeed() {
 		return default_hero_speed;
 	}
 };
