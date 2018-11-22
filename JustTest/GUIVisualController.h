@@ -50,8 +50,13 @@ class GUIVisualController{
 				if (is_animation_type_exists((*anim_set)[anim_cnt]) != -1 && is_object_type_exists((*object_names)[obj_cnt]) != -1) {
 					texture_buffer[is_object_type_exists((*object_names)[obj_cnt])][is_animation_type_exists((*anim_set)[anim_cnt])] = animation;
 				}
+				delete textures_set;
 			}
+
+			delete anim_set;
 		}
+		delete object_names;
+
 		if (settings.isSpriteDebugOutputEnabled()) {
 			std::cout << " -- GUI sprites loading completed -- " << std::endl << std::endl;
 		}

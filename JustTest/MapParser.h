@@ -100,9 +100,6 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 					frame_duration_string,
 					faction_string;
 
-				Object * object = new Object();
-
-
 				map_file >> object_name;
 				map_file >> input;
 				if (input == "layer") {
@@ -230,7 +227,7 @@ std::vector<std::vector<Object *>> parseMap(std::string path) {
 					}
 				}
 
-				object = new Object(
+				Object * object = new Object(
 					position, 
 					origin, 
 					(ObjectType)object_type_index, 

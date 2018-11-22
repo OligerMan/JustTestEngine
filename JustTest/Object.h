@@ -8,48 +8,109 @@
 
 class Object {
 
-	CollisionModel col_model;
+	CollisionModel * col_model = new CollisionModel();
 
 	CollisionType object_col_type;
 	VisualInfo vis_info;
-	UnitInfo unit_info;
-	ObjectType object_type;
+	UnitInfo * unit_info;
+	ObjectType object_type_info;
 
 	bool deleted = false;
 
 public:
 
+	~Object() {
+		delete col_model;
+		delete unit_info;
+	}
+
 	Object() {}
 
-	Object(Point point) {
-		col_model.setPosition(point);
-		col_model.addCircle(Point(), 0);
+	Object(
+		Point point
+	) {
+		col_model->setPosition(point);
+		col_model->addCircle(Point(), 0);
 	}
 
-	Object(Point point, Point origin) : Object(point) {
-		col_model.setOrigin(origin);
+	Object(
+		Point point, 
+		Point origin
+	) : Object(
+		point
+	) {
+		col_model->setOrigin(origin);
 	}
 
-	Object(Point point, CollisionType obj_col_type, VisualInfo visual_info) : Object(point) {
+	Object(
+		Point point, 
+		CollisionType obj_col_type, 
+		VisualInfo visual_info
+	) : Object(
+		point
+	) {
 		object_col_type = obj_col_type;
 		vis_info = visual_info;
 	}
 
-	Object(Point point, Point origin, CollisionType obj_col_type, VisualInfo visual_info) : Object(point, origin) {
+	Object(
+		Point point, 
+		Point origin, 
+		CollisionType obj_col_type, 
+		VisualInfo visual_info
+	) : Object(
+		point, 
+		origin
+	) {
 		object_col_type = obj_col_type;
 		vis_info = visual_info;
 	}
 
-	Object(Point point, Point origin, ObjectType new_object_type, CollisionType obj_col_type, VisualInfo visual_info) : Object(point, origin, obj_col_type, visual_info) {
-		object_type = new_object_type;
+	Object(
+		Point point, 
+		Point origin, 
+		ObjectType new_object_type, 
+		CollisionType obj_col_type, 
+		VisualInfo visual_info
+	) : Object(
+		point, 
+		origin, 
+		obj_col_type, 
+		visual_info
+	) {
+		object_type_info = new_object_type;
 
-		col_model = *(new CollisionModel("collision/" + collision_type[new_object_type] + ".col"));
-		col_model.setPosition(point);
-		col_model.setOrigin(origin);
+		delete col_model;
+		col_model = new CollisionModel("collision/" + collision_type[new_object_type] + ".col");
+		col_model->setPosition(point);
+		col_model->setOrigin(origin);
+
+		unit_info = new UnitInfo("unit_info/" + object_type[new_object_type] + ".unit");
+	}
+
+	Object(
+		Point point, 
+		Point origin, 
+		ObjectType new_object_type, 
+		CollisionType obj_col_type, 
+		VisualInfo visual_info, 
+		double hp, 
+		double mana, 
+		double endurance
+	) : Object(
+		point, 
+		origin, 
+		new_object_type, 
+		obj_col_type, 
+		visual_info
+	) {
+		unit_info->setHealth(hp);
+		unit_info->setMana(mana);
+		unit_info->setEndurance(endurance);
 	}
 
 	CollisionModel * getCollisionModel() {
-		return &col_model;
+		return col_model;
 	}
 
 	CollisionType getObjectCollisionType() {
@@ -77,67 +138,67 @@ public:
 	}
 
 	Point getSpeed() {
-		return col_model.getSpeed();
+		return col_model->getSpeed();
 	}
 
 	void setSpeed(Point speed) {
-		col_model.setSpeed(speed);
+		col_model->setSpeed(speed);
 	}
 
 	void changeSpeed(Point difference) {
-		col_model.changeSpeed(difference);
+		col_model->changeSpeed(difference);
 	}
 
 	Point getPosition() {
-		return col_model.getPosition();
+		return col_model->getPosition();
 	}
 
 	void setPosition(Point origin) {
-		col_model.setPosition(origin);
+		col_model->setPosition(origin);
 	}
 
 	void changePosition(Point difference) {
-		col_model.changePosition(difference);
+		col_model->changePosition(difference);
 	}
 
 	void forceChangePosition(Point difference) {
-		col_model.forceChangePosition(difference);
+		col_model->forceChangePosition(difference);
 	}
 
 	Point getOrigin() {
-		return col_model.getOrigin();
+		return col_model->getOrigin();
 	}
 
 	void setOrigin(Point origin) {
-		col_model.setOrigin(origin);
+		col_model->setOrigin(origin);
 	}
 
 	void changeOrigin(Point difference) {
-		col_model.changeOrigin(difference);
+		col_model->changeOrigin(difference);
 	}
 
 	void setAutoOrigin() {
-		col_model.setAutoOrigin();
+		col_model->setAutoOrigin();
 	}
 
 	double getAngle() {
-		return col_model.getAngle();
+		return col_model->getAngle();
 	}
 
 	void setAngle(double angle) {
-		col_model.setAngle(angle);
+		col_model->setAngle(angle);
 	}
 
 	void changeAngle(double difference) {
-		col_model.changeAngle(difference);
+		col_model->changeAngle(difference);
 	}
 
 	ObjectType getObjectType() {
-		return object_type;
+		return object_type_info;
 	}
 
 	UnitInfo * getUnitInfo() {
-		return &unit_info;
+		return unit_info;
 	}
 
 	void setAnimationType(AnimationType animation_type) {
@@ -153,7 +214,7 @@ public:
 	}
 
 	Point getSquareBorder() {
-		return col_model.getSquareBorder();
+		return col_model->getSquareBorder();
 	}
 };
 

@@ -97,8 +97,6 @@ bool gui_parser(std::string path, std::vector<std::vector<Object *>> * output) {
 					sprite_type,
 					animation_type;
 
-				Object * object = new Object();
-
 
 				gui_file >> object_name;
 				gui_file >> input;
@@ -203,7 +201,7 @@ bool gui_parser(std::string path, std::vector<std::vector<Object *>> * output) {
 					}
 				}
 
-				object = new Object(
+				Object * object = new Object(
 					position,
 					origin,
 					(ObjectType)object_type_index,

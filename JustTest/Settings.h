@@ -14,6 +14,7 @@ class Settings {
 	bool gamepad_debug_output = true;
 	bool collision_debug_mode = false;
 	bool navigation_debug_mode = false;
+	bool unit_info_debug = true;
 
 	bool is_settings_loaded = false;
 
@@ -116,6 +117,10 @@ public:
 
 	void switchNavigationGridMode() {
 		navigation_debug_mode = navigation_debug_mode ^ true;
+	}
+
+	bool isUnitInfoDebugEnabled() {
+		return unit_info_debug;
 	}
 };
 

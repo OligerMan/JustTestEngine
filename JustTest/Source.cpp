@@ -172,11 +172,8 @@ void gameCycle(std::string map_name) {
 		double hero_speed = consts.getDefaultHeroSpeed();
 		Object * hero_object = game_map1.getHero();
 		if (hero_object != nullptr) {
-			if (hero_object != nullptr) {
-				hero_object->setSpeed(Point(0, 0));
-				hero_object->setAnimationType(hold_anim);
-			}
-
+			hero_object->setSpeed(Point(0, 0));
+			hero_object->setAnimationType(hold_anim);
 		}
 		
 		
@@ -271,6 +268,7 @@ void gameCycle(std::string map_name) {
 				view1.setCenter(view1.getCenter() + sf::Vector2f(diff.x, diff.y));
 			}
 		}
+
 		window.setView(view1);
 
 		window.display();

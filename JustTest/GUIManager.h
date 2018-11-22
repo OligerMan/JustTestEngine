@@ -76,6 +76,7 @@ class GUIManager {
 		Event event = gui_event_buffer.getEvent();
 
 		if (event.getEventType() == clicked && event.getFirstObject()->getObjectType() != redactor_back) {
+			delete selected_object;
 			selected_object = new Object(*event.getFirstObject());
 			selected_object->setAutoOrigin();
 		}

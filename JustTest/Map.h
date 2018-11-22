@@ -137,6 +137,7 @@ class Map {
 							if (checkObjectCollision(grid_elem, object) && navigation_grid[cur_point.x / grid_size][cur_point.y / grid_size] != 1) {
 								navigation_grid[cur_point.x / grid_size][cur_point.y / grid_size] = 1;
 							}
+							delete grid_elem;
 						}
 					}
 				}
@@ -213,6 +214,9 @@ class Map {
 							else {
 								object1->setAnimationType(hold_anim);
 							}
+							if ((object1->getPosition() - object2->getPosition()).getLength() < object2->getUnitInfo()->getAttackRange1()) {
+								object1->setAnimationType(attack1_anim);
+							}
 						}
 					}
 				}
@@ -223,7 +227,10 @@ class Map {
 	void garbageCollector() {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
-				if (objects[layer][i]->isDeleted()) {
+				if (objects[layer][i]->isDeleted() || objects[layer][i]->getUnitInfo()->isDead()) {
+					if (objects[layer][i] == hero) {
+						hero = nullptr;
+					}
 					objects[layer].erase(objects[layer].begin() + i);
 				}
 			}
@@ -246,10 +253,17 @@ class Map {
 			switch (buffer_elem.getEventType()) {
 			case null:
 				break;
-			case default_collision:
+			case attack:
 
 				obj1->getUnitInfo()->dealDamage(std::max(0.0, (obj1->getSpeed().getLength() - thresh) * coef));
 				obj2->getUnitInfo()->dealDamage(std::max(0.0, (obj2->getSpeed().getLength() - thresh) * coef));
+
+				if (obj1->getObjectAnimationType() == attack1_anim) {
+					obj2->getUnitInfo()->dealDamage(obj1->getUnitInfo()->getAttackRange1());
+				}
+				if (obj2->getObjectAnimationType() == attack1_anim) {
+					obj1->getUnitInfo()->dealDamage(obj2->getUnitInfo()->getAttackRange1());
+				}
 				break;
 			case clicked:
 				if (settings.isRedactorMode()) {
