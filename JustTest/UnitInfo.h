@@ -57,6 +57,14 @@ class UnitInfo {
 	double attack2_damage = 0;
 	double attack3_damage = 0;
 
+	double attack1_delay = 100;
+	double attack2_delay = 0;
+	double attack3_delay = 0;
+
+	double attack1_cooldown = 300;
+	double attack2_cooldown = 0;
+	double attack3_cooldown = 0;
+
 	double default_speed = 0.07;
 	double speed_coef = 1;
 
@@ -67,14 +75,17 @@ class UnitInfo {
 	bool unit_info_correct = true;
 
 
-	void parseUnitInfo(std::string path) {
+	void parseUnitInfo(std::string path, bool * status) {
 		std::ifstream unit_input;
 		unit_input.open(path);
+
+		*status = true;
 
 		if (!unit_input.is_open()) {
 			if (settings.isErrorOutputEnabled()) {
 				std::cout << "Unit info file " << path << " not found" << std::endl;
 			}
+			*status = false;
 			return;
 		}
 
@@ -171,6 +182,42 @@ class UnitInfo {
 					std::cout << "Attack damage 3 is set to " << attack3_damage << std::endl;
 				}
 			}
+			if (setting == "attack1_delay") {
+				attack1_delay = std::stoi(value);
+				if (settings.isUnitInfoDebugEnabled()) {
+					std::cout << "Attack delay 1 is set to " << attack1_damage << std::endl;
+				}
+			}
+			if (setting == "attack2_delay") {
+				attack2_delay = std::stoi(value);
+				if (settings.isUnitInfoDebugEnabled()) {
+					std::cout << "Attack delay 2 is set to " << attack2_damage << std::endl;
+				}
+			}
+			if (setting == "attack3_delay") {
+				attack3_delay = std::stoi(value);
+				if (settings.isUnitInfoDebugEnabled()) {
+					std::cout << "Attack delay 3 is set to " << attack3_damage << std::endl;
+				}
+			}
+			if (setting == "attack1_cooldown") {
+				attack1_cooldown = std::stoi(value);
+				if (settings.isUnitInfoDebugEnabled()) {
+					std::cout << "Attack cooldown 1 is set to " << attack1_damage << std::endl;
+				}
+			}
+			if (setting == "attack2_cooldown") {
+				attack2_delay = std::stoi(value);
+				if (settings.isUnitInfoDebugEnabled()) {
+					std::cout << "Attack cooldown 2 is set to " << attack2_damage << std::endl;
+				}
+			}
+			if (setting == "attack3_cooldown") {
+				attack3_cooldown = std::stoi(value);
+				if (settings.isUnitInfoDebugEnabled()) {
+					std::cout << "Attack cooldown 3 is set to " << attack3_damage << std::endl;
+				}
+			}
 			if (setting == "default_speed") {
 				default_speed = std::stoi(value); 
 				if (settings.isUnitInfoDebugEnabled()) {
@@ -208,8 +255,8 @@ public:
 
 	UnitInfo() {}
 
-	UnitInfo(std::string path) {
-		parseUnitInfo(path);
+	UnitInfo(std::string path, bool * status) {
+		parseUnitInfo(path, status);
 	}
 
 	void setHealth(double new_hp) {
@@ -321,6 +368,30 @@ public:
 
 	double getAttackDamage3() {
 		return attack3_damage;
+	}
+
+	double getAttackDelay1() {
+		return attack1_delay;
+	}
+
+	double getAttackDelay2() {
+		return attack2_delay;
+	}
+
+	double getAttackDelay3() {
+		return attack3_delay;
+	}
+
+	double getAttackCooldown1() {
+		return attack1_cooldown;
+	}
+
+	double getAttackCooldown2() {
+		return attack2_cooldown;
+	}
+
+	double getAttackCooldown3() {
+		return attack3_cooldown;
 	}
 
 };

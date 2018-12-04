@@ -50,6 +50,7 @@ void gameCycle(std::string map_name) {
 	bool is_game_cycle = true;
 	int frame_num = 0;
 
+	Point previous_speed;
 
 	while (window.isOpen())
 	{
@@ -143,7 +144,6 @@ void gameCycle(std::string map_name) {
 				Object * object = new Object(*gui_manager.getSelectedObject());
 				object->setPosition(cursor_pos + viewport_pos);
 				visual_ctrl.drawObject(object, &window);
-				delete object;
 			}
 		}
 		
@@ -171,12 +171,9 @@ void gameCycle(std::string map_name) {
 
 		double hero_speed = consts.getDefaultHeroSpeed();
 		Object * hero_object = game_map1.getHero();
-		if (hero_object != nullptr) {
-			hero_object->setSpeed(Point(0, 0));
-			hero_object->setAnimationType(hold_anim);
-		}
 		
-		
+		Point new_speed;
+
 		if (settings.isRedactorMode()) {
 			const double viewport_speed = 0.1;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -207,11 +204,12 @@ void gameCycle(std::string map_name) {
 			if (hero_object != nullptr) {
 				if (sf::Joystick::isConnected(0)) {         // gamepad input
 
-					hero_object->setSpeed(Point(
+					new_speed = Point(
 						sf::Joystick::getAxisPosition(0, sf::Joystick::X),
-						sf::Joystick::getAxisPosition(0, sf::Joystick::Y)));
-					if (abs(hero_object->getSpeed().x) < 1 && abs(hero_object->getSpeed().y) < 1) {
-						hero_object->setSpeed(Point());
+						sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+					if (abs(new_speed.x) < 1 && abs(new_speed.y) < 1) {
+						new_speed = Point();
 					}
 					else {
 						hero_object->setAnimationType(move_anim);
@@ -227,19 +225,19 @@ void gameCycle(std::string map_name) {
 					}
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-					hero_object->changeSpeed(Point(0, -1));
+					new_speed += Point(0, -1);
 					hero_object->setAnimationType(move_anim);
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-					hero_object->changeSpeed(Point(-1, 0));
+					new_speed += Point(-1, 0);
 					hero_object->setAnimationType(move_anim);
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-					hero_object->changeSpeed(Point(0, 1));
+					new_speed += Point(0, 1);
 					hero_object->setAnimationType(move_anim);
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-					hero_object->changeSpeed(Point(1, 0));
+					new_speed += Point(1, 0);
 					hero_object->setAnimationType(move_anim);
 				}
 
@@ -247,14 +245,29 @@ void gameCycle(std::string map_name) {
 					settings.switchNavigationGridMode();
 					Sleep(100);
 				}
-
-				if (hero_object->getSpeed().getLength() != 0) {
-					hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
-					hero_object->setSpeed(hero_object->getSpeed().getNormal() * hero_speed);
-				}
+				
 			}
 		}
-		
+
+		new_speed = new_speed.getNormal() * hero_speed;
+		if (hero_object != nullptr) {
+			Point old_pos = hero_object->getSpeed();
+			old_pos -= previous_speed;
+			hero_object->setSpeed(old_pos * (1 - consts.getFrictionCoef()));
+
+			hero_object->changeSpeed(new_speed);
+			previous_speed = new_speed;
+
+			if (hero_object->getSpeed().getLength() != 0) {
+				hero_object->setAngle(atan2(hero_object->getSpeed().y, hero_object->getSpeed().x) / PI * 180);
+			}
+			else {
+				previous_speed = Point();
+			}
+			if (hero_object->getSpeed() == Point()) {
+				hero_object->setAnimationType(hold_anim);
+			}
+		}
 
 		// viewport positioning
 		if (settings.isRedactorMode()) {

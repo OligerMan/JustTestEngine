@@ -193,12 +193,20 @@ class Map {
 		navigation_paths.clear();
 		for (int i = 0; i < objects[main_layer].size(); i++) {
 			Object * object1 = objects[main_layer][i];
+			if (object1->getUnitInfo() == nullptr) {
+				continue;
+			}
+
 			int faction1 = object1->getUnitInfo()->getFaction();
 
 			if (faction1 != FactionList::null_faction) {
 				for (int j = 0; j < objects[main_layer].size(); j++) {
 					if (i != j) {
 						Object * object2 = objects[main_layer][j];
+						if (object2->getUnitInfo() == nullptr) {
+							continue;
+						}
+
 						int faction2 = object2->getUnitInfo()->getFaction();
 
 						if (faction1 != faction2 && faction1 != hero_faction && faction1 != null_faction && faction2 != null_faction) {
@@ -227,7 +235,7 @@ class Map {
 	void garbageCollector() {
 		for (int layer = 0; layer < objects.size(); layer++) {
 			for (int i = 0; i < objects[layer].size(); i++) {
-				if (objects[layer][i]->isDeleted() || objects[layer][i]->getUnitInfo()->isDead()) {
+				if (objects[layer][i]->isDeleted() || !(objects[layer][i]->getUnitInfo() != nullptr && !objects[layer][i]->getUnitInfo()->isDead())) {
 					if (objects[layer][i] == hero) {
 						hero = nullptr;
 					}
@@ -250,19 +258,24 @@ class Map {
 			double thresh = consts.getSpeedDamageThreshold();
 			double coef = consts.getSpeedDamageCoef();
 
+			UnitInfo * unit1 = obj1->getUnitInfo(), *unit2 = obj2->getUnitInfo();
 			switch (buffer_elem.getEventType()) {
 			case null:
 				break;
 			case attack:
 
-				obj1->getUnitInfo()->dealDamage(std::max(0.0, (obj1->getSpeed().getLength() - thresh) * coef));
-				obj2->getUnitInfo()->dealDamage(std::max(0.0, (obj2->getSpeed().getLength() - thresh) * coef));
+				if (unit1 != nullptr && unit2 != nullptr) {
+					obj1->getUnitInfo()->dealDamage(std::max(0.0, (obj1->getSpeed().getLength() - thresh) * coef));
+					obj2->getUnitInfo()->dealDamage(std::max(0.0, (obj2->getSpeed().getLength() - thresh) * coef));
 
-				if (obj1->getObjectAnimationType() == attack1_anim) {
-					obj2->getUnitInfo()->dealDamage(obj1->getUnitInfo()->getAttackRange1());
-				}
-				if (obj2->getObjectAnimationType() == attack1_anim) {
-					obj1->getUnitInfo()->dealDamage(obj2->getUnitInfo()->getAttackRange1());
+					if (obj1->getObjectAnimationType() == attack1_anim) {
+						obj2->getUnitInfo()->dealDamage(obj1->getUnitInfo()->getAttackDamage1());
+						obj2->changeSpeed((obj2->getPosition() - obj1->getPosition()).getNormal() * consts.getKnockbackSpeed());
+					}
+					if (obj2->getObjectAnimationType() == attack1_anim) {
+						obj1->getUnitInfo()->dealDamage(obj2->getUnitInfo()->getAttackDamage1());
+						obj1->changeSpeed((obj1->getPosition() - obj2->getPosition()).getNormal() * consts.getKnockbackSpeed());
+					}
 				}
 				break;
 			case clicked:

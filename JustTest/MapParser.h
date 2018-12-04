@@ -286,7 +286,12 @@ void saveMap(std::string path, std::vector<std::vector<Object *>> * objects) {
 			new_map << "        sprite_type " << sprite_type[object->getObjectSpriteType()] << std::endl;
 			new_map << "        animation_type " << animation_type[object->getObjectAnimationType()] << std::endl;
 			new_map << "        frame_duration " << object->getFrameDuration() << std::endl;
-			new_map << "        faction " << faction_type[object->getUnitInfo()->getFaction()] << std::endl;
+			if (object->getUnitInfo() != nullptr) {
+				new_map << "        faction " << faction_type[object->getUnitInfo()->getFaction()] << std::endl;
+			}
+			else {
+				new_map << "        faction 0" << std::endl;
+			}
 			new_map << std::endl;
 		}
 	}

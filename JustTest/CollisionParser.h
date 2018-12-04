@@ -26,16 +26,19 @@ Template for file:
  -- End of description --
 */
 
-std::vector<Circle> collisionParse(std::string path, bool & is_static) {
+std::vector<Circle> collisionParse(std::string path, bool & is_static, bool * status) {
 	std::ifstream collision_file;
 	collision_file.open(path);
 
 	std::vector<Circle> output;
 
+	*status = true;
+
 	if (!collision_file.is_open()) {
 		if (settings.isErrorOutputEnabled()) {
 			std::cout << "Collision file " << path << " not found" << std::endl;
 		}
+		*status = false;
 		return output;
 	}
 

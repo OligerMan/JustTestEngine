@@ -4,14 +4,14 @@ e:\projects\justtest\justtestengine\justtest\settings.h(48): warning C4800: 'int
 e:\projects\justtest\justtestengine\justtest\settings.h(57): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\settings.h(60): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\settings.h(63): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\justtest\justtestengine\justtest\collisionparser.h(48): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\collisionparser.h(51): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\collision.h(37): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\justtest\justtestengine\justtest\collision.h(147): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\collision.h(148): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\unitinfo.h(107): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\justtest\justtestengine\justtest\unitinfo.h(120): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\justtest\justtestengine\justtest\unitinfo.h(133): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-e:\projects\justtest\justtestengine\justtest\unitinfo.h(187): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\unitinfo.h(118): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\unitinfo.h(131): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\unitinfo.h(144): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+e:\projects\justtest\justtestengine\justtest\unitinfo.h(234): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
 e:\projects\justtest\justtestengine\justtest\timer.h(22): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
 e:\projects\justtest\justtestengine\justtest\astaralgorithm.h(27): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\justtest\justtestengine\justtest\astaralgorithm.h(46): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
@@ -25,8 +25,8 @@ e:\projects\justtest\justtestengine\justtest\map.h(109): warning C4244: 'argumen
 e:\projects\justtest\justtestengine\justtest\map.h(113): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\justtest\justtestengine\justtest\map.h(137): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
 e:\projects\justtest\justtestengine\justtest\map.h(138): warning C4244: 'argument': conversion from 'double' to 'unsigned __int64', possible loss of data
-e:\projects\justtest\justtestengine\justtest\map.h(280): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-e:\projects\justtest\justtestengine\justtest\map.h(333): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\justtest\justtestengine\justtest\map.h(293): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+e:\projects\justtest\justtestengine\justtest\map.h(346): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 e:\projects\justtest\justtestengine\justtest\visualcontroller.h(109): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\justtest\justtestengine\justtest\visualcontroller.h(110): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\justtest\justtestengine\justtest\visualcontroller.h(111): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -39,22 +39,22 @@ e:\projects\justtest\justtestengine\justtest\guiparser.h(85): warning C4800: 'st
               _Ty=Object *
           ]
 e:\projects\justtest\justtestengine\justtest\source.cpp(31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(79): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\source.cpp(80): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\source.cpp(84): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(81): warning C4018: '<': signed/unsigned mismatch
 e:\projects\justtest\justtestengine\justtest\source.cpp(85): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(100): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\source.cpp(86): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\justtest\justtestengine\justtest\source.cpp(101): warning C4018: '<': signed/unsigned mismatch
-e:\projects\justtest\justtestengine\justtest\source.cpp(103): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(106): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(102): warning C4018: '<': signed/unsigned mismatch
+e:\projects\justtest\justtestengine\justtest\source.cpp(104): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 e:\projects\justtest\justtestengine\justtest\source.cpp(107): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(122): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(108): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\projects\justtest\justtestengine\justtest\source.cpp(123): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(124): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(180): warning C4305: 'argument': truncation from 'const double' to 'float'
 e:\projects\justtest\justtestengine\justtest\source.cpp(183): warning C4305: 'argument': truncation from 'const double' to 'float'
-e:\projects\justtest\justtestengine\justtest\source.cpp(186): warning C4305: 'argument': truncation from 'const double' to 'float'
+e:\projects\justtest\justtestengine\justtest\source.cpp(186): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
 e:\projects\justtest\justtestengine\justtest\source.cpp(189): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(192): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
-e:\projects\justtest\justtestengine\justtest\source.cpp(268): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\projects\justtest\justtestengine\justtest\source.cpp(281): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\program files (x86)\microsoft visual studio 14.0\vc\include\utility(172): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   e:\projects\justtest\justtestengine\justtest\astaralgorithm.h(49): note: see reference to function template instantiation 'std::pair<Point,int>::pair<Point,double&,void,0>(_Other1 &&,_Other2) noexcept' being compiled
           with

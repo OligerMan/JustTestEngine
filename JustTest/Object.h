@@ -81,11 +81,23 @@ public:
 		object_type_info = new_object_type;
 
 		delete col_model;
-		col_model = new CollisionModel("collision/" + collision_type[new_object_type] + ".col");
+
+		bool status;
+
+		col_model = new CollisionModel("collision/" + collision_type[new_object_type] + ".col", &status);
 		col_model->setPosition(point);
 		col_model->setOrigin(origin);
+		/*if (!status) {
+			delete col_model;
+			col_model = nullptr;
+		}*/
 
-		unit_info = new UnitInfo("unit_info/" + object_type[new_object_type] + ".unit");
+		
+		unit_info = new UnitInfo("unit_info/" + object_type[new_object_type] + ".unit", &status);
+		if (!status) {
+			delete unit_info;
+			unit_info = nullptr;
+		}
 	}
 
 	Object(

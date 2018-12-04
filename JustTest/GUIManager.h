@@ -73,13 +73,15 @@ class GUIManager {
 	}
 
 	void processEventBuffer() {
-		Event event = gui_event_buffer.getEvent();
-
-		if (event.getEventType() == clicked && event.getFirstObject()->getObjectType() != redactor_back) {
-			delete selected_object;
-			selected_object = new Object(*event.getFirstObject());
-			selected_object->setAutoOrigin();
+		Event cur_event = gui_event_buffer.getEvent();
+		if (cur_event.getEventType() != null_event) {
+			if (cur_event.getEventType() == clicked && cur_event.getFirstObject()->getObjectType() != redactor_back) {
+				delete selected_object;
+				selected_object = new Object(*cur_event.getFirstObject());
+				selected_object->setAutoOrigin();
+			}
 		}
+		
 	}
 
 public:
@@ -144,7 +146,6 @@ public:
 				Object * output_obj = new Object(*selected_object);
 				output_obj->setPosition(click + viewport_pos);
 				external_event_buffer.addEvent(create_new, output_obj, nullptr);
-				delete selected_object;
 				selected_object = nullptr;
 				output = true;
 			}

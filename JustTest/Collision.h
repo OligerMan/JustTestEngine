@@ -25,8 +25,8 @@ public:
 
 	CollisionModel() {}
 
-	CollisionModel(std::string object_path) {
-		col_model = collisionParse(object_path, is_static);
+	CollisionModel(std::string object_path, bool * status) {
+		col_model = collisionParse(object_path, is_static, status);
 	}
 
 	bool isStatic() {
